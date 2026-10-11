@@ -40,19 +40,10 @@ using Summary.IdealCrm;
 [assembly: Feature(
     Id = IdealCrm.Features.GetProjectDetailsBy,
     Name = IdealCrm.Localize.SubjectOfGetProjectDetailsBy,
-    Description =IdealCrm.Localize.DescriptionOfGetProjectDetailsBy,
+    Description = IdealCrm.Localize.DescriptionOfGetProjectDetailsBy,
     Category = IdealCrm.Public.Category,
     Dependencies = new[] { IdealCrm.Features.IdealCrm },
     Version = "1.1.1"
-)]
-
-[assembly: Feature(
-    Id = IdealCrm.Features.CreateQuote,
-    Name = IdealCrm.Localize.SubjectOfCreateQuote,
-    Description =IdealCrm.Localize.DescriptionOfCreateQuote,
-    Category = IdealCrm.Public.Category,
-    Dependencies = new[] { IdealCrm.Features.IdealCrm },
-    Version = "1.0.0"
 )]
 
 [assembly: Feature(
