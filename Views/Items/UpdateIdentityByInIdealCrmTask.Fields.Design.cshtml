@@ -1,0 +1,13 @@
+@model ActivityViewModel<Summary.IdealCrm.Workflows.Task.Identity.UpdateBy.UpdateIdentityByInIdealCrmTask>
+@using Core.Workflows.Helpers
+@using Core.Workflows.ViewModels
+@using Summary.IdealCrm
+
+<header>
+  <h4>
+    @Model.Activity.GetTitleOrDefault(() => T[IdealCrm.Localize.SubjectOfUpdateIdentityBy])
+  </h4>
+  <em>
+    &quot;Ideal - Update Identity By&quot;
+  </em>
+</header>

@@ -1,0 +1,163 @@
+@model Summary.IdealCrm.Workflows.Task.Conversation.Create.CreateConversationInIdealCrmTaskViewModel
+
+@inject Microsoft.Extensions.Options.IOptions<Summary.IdealCrm.Settings.IdealCrmSettings> _options;
+
+<div class="row">
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="UserName">
+      <label asp-for="UserName">کلید کاربری</label>
+      <input type="text" asp-for="UserName" class="form-control" placeholder="@_options.Value.UserName" />
+        <span class="hint">برای دریافت کلید کاربری با پشتیبانی CRM ایده آل تماس بگیرید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Password">
+      <label asp-for="Password">توکن</label>
+      <input type="text" asp-for="Password" class="form-control" placeholder="@_options.Value.Password" />
+        <span class="hint">برای دریافت توکن با پشتیبانی CRM ایده آل تماس بگیرید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Company">
+      <label asp-for="Company">مخاطب مرتبط(CompanyId)<span class="text-danger">*</span></label>
+      <input type="text" asp-for="Company" class="form-control" />
+      <span class="hint">
+        با مقداردهی این فیلد تعیین میکنید رویداد به کدام یک از مخاطبین متصل شود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Person">
+      <label asp-for="Person">طرف مذاکره<span class="text-danger">*</span></label>
+      <input type="text" asp-for="Person" class="form-control" />
+      <span class="hint">
+        با مقداردهی این فیلد تعیین میکنید رویداد به کدام یک از پرسنل متصل شود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Project">
+      <label asp-for="Project">پروژه مرتبط<span class="text-danger">*</span></label>
+      <input type="text" asp-for="Project" class="form-control" />
+      <span class="hint">
+        با مقداردهی این فیلد تعیین میکنید رویداد به کدام یک از پروژه ها متصل شود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Date">
+      <label asp-for="Date">تاریخ و زمان مذاکره(میلادی)</label>
+      <input type="text" asp-for="Date" class="form-control" />
+      <span class="hint">نمونه قالب: "yyyy/MM/dd HH:mm:ss", "yyyy-MM-dd HH:mm:ss"</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Type">
+      <label asp-for="Type">نوع مذاکره<span class="text-danger">*</span></label>
+      <input type="text" asp-for="Type" class="form-control" />
+      <span class="hint">
+        مقدار این فیلد میتواند به صورت «شناسه» یا «عنوان» وارد شود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Desc">
+      <label asp-for="Desc">شرح مذاکره</label>
+      <input type="text" asp-for="Desc" class="form-control" />
+      <span class="hint">
+        برای درج توضیحات رویداد از طریق این فیلد اقدام کنید.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="CreatorUser">
+      <label asp-for="CreatorUser">مذاکره کننده<span class="text-danger">*</span></label>
+      <input type="text" asp-for="CreatorUser" class="form-control" />
+      <span class="hint">مقدار این فیلد میتواند به صورت «شناسه کاربری» یا «نام کاربری» وارد شود.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="ReferUser">
+      <label asp-for="ReferUser">ارجاع به<span class="text-danger">*</span></label>
+      <input type="text" asp-for="ReferUser" class="form-control" />
+      <span class="hint">مقدار این فیلد میتواند به صورت «شناسه کاربری» یا «نام کاربری» وارد شود.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Status">
+      <label asp-for="Status">وضعیت پیشرفت<span class="text-danger">*</span></label>
+      <input type="text" asp-for="Status" class="form-control" />
+      <span class="hint">
+        مقدار این فیلد میتواند به صورت «درصد پیشرفت» یا «عنوان» وارد شود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Priority">
+      <label asp-for="Priority">اولویت نمایش<span class="text-danger">*</span></label>
+      <input type="text" asp-for="Priority" class="form-control" />
+      <span class="hint">
+        مقدار این فیلد میتواند به صورت «شناسه» یا «عنوان» وارد شود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="RemindDate">
+      <label asp-for="RemindDate">تاریخ یادآوری در کارتابل(میلادی)</label>
+      <input type="text" asp-for="RemindDate" class="form-control" />
+      <span class="hint">نمونه قالب: "yyyy/MM/dd", "yyyy-MM-dd"</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="AlarmDate">
+      <label asp-for="AlarmDate">تاریخ آلارم(میلادی)</label>
+      <input type="text" asp-for="AlarmDate" class="form-control" />
+      <span class="hint">
+        از طریق این فیلد تعیین میگردد فرم «رویداد» در چه تاریخی به صورت آلارم به کاربر نمایش داده شود. قالب: "yyyy/MM/dd", "yyyy-MM-dd"
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="RemindTime">
+      <label asp-for="RemindTime">زمان آلارم</label>
+      <input type="text" asp-for="RemindTime" class="form-control" />
+      <span class="hint">
+        از طریق این فیلد تعیین میگردد فرم «رویداد» در چه ساعتی به صورت آلارم به کاربر نمایش داده شود. قالب: "HH:mm"
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="IsRemind">
+      <label asp-for="IsRemind">یادآوری شد؟(از کارتابل یادآوری خارج شود؟)</label>
+      <input type="text" asp-for="IsRemind" class="form-control" />
+      <span class="hint">
+        قالب فرمت: "بله"، "خیر"، "1"، "0"، "False"، "True"
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="IsBookMark">
+      <label asp-for="IsBookMark">نشانه گذاری شود؟</label>
+      <input type="text" asp-for="IsBookMark" class="form-control" />
+      <span class="hint">
+        قالب فرمت: "بله"، "خیر"، "1"، "0"، "False"، "True"
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="DoingTime">
+      <label asp-for="DoingTime">مدت زمان انجام</label>
+      <input type="text" asp-for="DoingTime" class="form-control" />
+      <span class="hint">نمونه قالب: "HH:mm"</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Output">
+      <label asp-for="Output">شناسه متغیرهای خروجی <span class="text-danger">*</span></label>
+      <input type="text" asp-for="Output" class="form-control" />
+      <span class="hint">
+        پیشوند متغیرهای خروجی از طریق این فیلد مقداردهی میشوند.
+      </span>
+    </div>
+  </div>
+</div>

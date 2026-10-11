@@ -1,0 +1,46 @@
+@model Summary.IdealCrm.Workflows.Task.Project.Details.GetBy.GetProjectDetailsByInIdealCrmTaskViewModel
+
+@inject Microsoft.Extensions.Options.IOptions<Summary.IdealCrm.Settings.IdealCrmSettings> _options;
+
+<div class="row">
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="UserName">
+      <label asp-for="UserName">کلید کاربری</label>
+      <input type="text" asp-for="UserName" class="form-control" placeholder="@_options.Value.UserName" />
+      <span class="hint">برای دریافت کلید کاربری با پشتیبانی CRM ایده آل تماس بگیرید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Password">
+      <label asp-for="Password">توکن</label>
+      <input type="text" asp-for="Password" class="form-control" placeholder="@_options.Value.Password" />
+      <span class="hint">برای دریافت توکن با پشتیبانی CRM ایده آل تماس بگیرید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="SearchKind">
+      <label asp-for="SearchKind">نوع جستجو</label>
+      <select asp-for="SearchKind" class="form-control">
+        <option value="Id">شناسه</option>
+        <option value="InquiryNumber">شماره استعلام</option>
+        <option value="Title">عنوان<span class="hint">(بدون پسوند)</span></option>
+        <option value="IdentityId">شناسه مخاطب</option>
+      </select>
+      <span class="hint">از لیست کشویی نوع پارامتر جستجو را تعیین کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Filter">
+      <label asp-for="Filter">عبارت جستجو <span class="text-danger">*</span></label>
+      <input type="text" asp-for="Filter" class="form-control" />
+      <span class="hint">متناسب با فیلتر «نوع جستجو» این فیلد مقداردهی شود.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Output">
+      <label asp-for="Output">شناسه متغیرهای خروجی <span class="text-danger">*</span></label>
+      <input type="text" asp-for="Output" class="form-control" />
+      <span class="hint">پیشوند متغیرهای خروجی از طریق این فیلد مقداردهی میشوند.</span>
+    </div>
+  </div>
+</div>

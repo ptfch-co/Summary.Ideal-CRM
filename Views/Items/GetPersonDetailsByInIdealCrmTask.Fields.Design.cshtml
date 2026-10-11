@@ -1,0 +1,13 @@
+@model ActivityViewModel<Summary.IdealCrm.Workflows.Task.Person.Details.GetBy.GetPersonDetailsByInIdealCrmTask>
+@using Core.Workflows.Helpers
+@using Core.Workflows.ViewModels
+@using Summary.IdealCrm
+
+<header>
+  <h4>
+    @Model.Activity.GetTitleOrDefault(() => T[IdealCrm.Localize.SubjectOfGetPersonDetailsBy])
+  </h4>
+  <em>
+    &quot;Ideal - Get Person Details By&quot;
+  </em>
+</header>

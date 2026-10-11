@@ -1,0 +1,14 @@
+@model Summary.IdealCrm.Workflows.Task.MobileIsExist.CheckMobileIsExistInIdealCrmTaskViewModel
+
+<div class="row">
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Mobile">
+      <label asp-for="Mobile">
+        شماره همراه
+        <span class="text-danger">*</span>
+      </label>
+      <input type="text" asp-for="Mobile" class="form-control" />
+      <span class="hint">از طریق این فیلد تکراری بودن شماره همراه بررسی میشود.</span>
+    </div>
+  </div>
+</div>

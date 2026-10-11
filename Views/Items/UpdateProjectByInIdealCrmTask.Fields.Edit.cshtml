@@ -1,0 +1,218 @@
+@model Summary.IdealCrm.Workflows.Task.Project.UpdateBy.UpdateProjectByInIdealCrmTaskViewModel;
+
+@inject Microsoft.Extensions.Options.IOptions<Summary.IdealCrm.Settings.IdealCrmSettings> _options;
+
+<div class="row">
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="UserName">کلید کاربری</label>
+      <input type="text" asp-for="UserName" class="form-control" placeholder="@_options.Value.UserName" />
+      <span class="hint">برای دریافت کلید کاربری با پشتیبانی CRM ایده آل تماس بگیرید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="Password">توکن</label>
+      <input type="text" asp-for="Password" class="form-control" placeholder="@_options.Value.Password" />
+      <span class="hint">برای دریافت توکن با پشتیبانی CRM ایده آل تماس بگیرید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="Filter">
+        عبارت جستجو
+        <span class="text-danger">*</span>
+      </label>
+      <input type="text" asp-for="Filter" class="form-control" />
+      <span class="hint">از شناسه پروژه برای جستجو استفاده میشود.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="Title">عنوان</label>
+      <div class="input-group">
+        <input type="text" asp-for="Title" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="TitleEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">از طریق این فیلد مقدار عنوان تعیین میگردد.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="PostFix">پسوند عنوان</label>
+      <div class="input-group">
+        <input type="text" asp-for="PostFix" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="PostFixEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">مقدار این فیلد به پسوند فیلد عنوان اضافه میشود.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="Desc">توضیحات</label>
+      <div class="input-group">
+        <input type="text" asp-for="Desc" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="DescEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">
+        برای درج توضیحات پروژه از طریق این فیلد اقدام کنید.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="StartDate">تاریخ شروع(میلادی)</label>
+      <div class="input-group">
+        <input type="text" asp-for="StartDate" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="StartDateEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">
+        نمونه قالب: "yyyy/MM/dd", "yyyy-MM-dd"
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="StarterUser">کاربر شروع کننده</label>
+      <div class="input-group">
+        <input type="text" asp-for="StarterUser" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="StarterUserEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">
+        مقدار این فیلد میتواند به صورت «شناسه کاربری» یا «نام کاربری» وارد شود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="Grade">رتبه</label>
+      <div class="input-group">
+        <input type="text" asp-for="Grade" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="GradeEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">
+        مقدار این فیلد میتواند به صورت «شناسه» یا «عنوان» وارد شود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="Priority">اولویت</label>
+      <div class="input-group">
+        <input type="text" asp-for="Priority" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="PriorityEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">
+        مقدار این فیلد میتواند به صورت «شناسه» یا «عنوان» وارد شود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="Group">گروه</label>
+      <div class="input-group">
+        <input type="text" asp-for="Group" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="GroupEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">
+        مقدار این فیلد میتواند به صورت «شناسه» یا «عنوان» وارد شود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="CnvsStatusGroup">مدل پیشرفت</label>
+      <div class="input-group">
+        <input type="text" asp-for="CnvsStatusGroup" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="CnvsStatusGroupEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">
+        مقدار این فیلد میتواند به صورت «شناسه» یا «عنوان» وارد شود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="RemindDateTime">تاریخ و زمان یادآوری(میلادی)</label>
+      <div class="input-group">
+        <input type="text" asp-for="RemindDateTime" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="RemindDateTimeEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">
+        نمونه قالب: "yyyy/MM/dd HH:mm:ss", "yyyy-MM-dd HH:mm:ss"
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="CmpPresentation">نحوه آشنایی</label>
+      <div class="input-group">
+        <input type="text" asp-for="CmpPresentation" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="CmpPresentationEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">
+        مقدار این فیلد میتواند به صورت «شناسه» یا «عنوان» وارد شود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="IsFinished">آرشیو شود؟</label>
+      <div class="input-group">
+        <input type="text" asp-for="IsFinished" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsFinishedEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">
+        قالب فرمت: "بله"، "خیر"، "1"، "0"، "False"، "True"
+      </span>
+    </div>
+  </div>
+</div>

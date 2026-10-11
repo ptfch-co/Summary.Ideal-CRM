@@ -1,0 +1,275 @@
+@using Summary.IdealCrm.Settings;
+
+@model Summary.IdealCrm.Workflows.Task.CreateIdentity.CreateIdentityInIdealCrmTaskViewModel
+
+@inject Microsoft.Extensions.Options.IOptions<IdealCrmSettings> _options;
+
+<div class="row">
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="UserName">
+      <label asp-for="UserName">نام کاربری</label>
+      <input type="text" asp-for="UserName" class="form-control" placeholder="@_options.Value.UserName" />
+      <span class="hint">برای دریافت کلید کاربری، تیکت جدیدی در باشگاه مشتریان CRM ایده آل ایجاد کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Password">
+      <label asp-for="Password">گذرواژه</label>
+      <input type="text" asp-for="Password" class="form-control" placeholder="@_options.Value.Password" />
+      <span class="hint">برای دریافت گذرواژه، تیکت جدیدی در باشگاه مشتریان CRM ایده آل ایجاد کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="IdentityType">
+      <label asp-for="IdentityType">ماهیت(حقیقی، حقوقی)</label>
+      <input type="text" asp-for="IdentityType" class="form-control" />
+      <div class="hint">از طریق این فیلد پارامتر «ماهیت» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="AssignTo">
+      <label asp-for="AssignTo">
+        بازاریاب
+        <span class="text-danger">*</span>
+      </label>
+      <input type="text" asp-for="AssignTo" class="form-control" />
+      <div class="hint">شناسه کاربری(User ID) که قصد دارید به عنوان بازاریاب انتخاب شود را در این فیلد وارد نمایید.
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Subject">
+      <label asp-for="Subject">
+        نام مخاطب
+        <span class="text-danger">*</span>
+      </label>
+      <input type="text" asp-for="Subject" class="form-control" />
+      <div class="hint">از طریق این فیلد پارامتر «نام مخاطب» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="Campaign">
+        کمپین
+      </label>
+      <input type="text" asp-for="Campaign" class="form-control" />
+      <div class="hint">از طریق «، ,» عنوان کمپین(های) که میخواهید انتخاب شوند را وارد نماید.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="Presentation">
+        نحوه آشنایی
+        <span class="text-danger">*</span>
+      </label>
+      <input type="text" asp-for="Presentation" class="form-control" />
+      <div class="hint">یکی از مقادیر لیست کشویی فیلد «نحوه آشنایی» را در این فیلد وارد نماید.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Type">
+      <label asp-for="Type">
+        نوع مخاطب
+        <span class="text-danger">*</span>
+      </label>
+      <input type="text" asp-for="Type" class="form-control" />
+      <div class="hint">یکی از مقادیر لیست کشویی فیلد «نوع مخاطب» را در این فیلد وارد نماید.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Group_1">
+      <label asp-for="Group_1">
+        گروه اول
+        <span class="text-danger">*</span>
+      </label>
+      <input type="text" asp-for="Group_1" class="form-control" />
+      <div class="hint">یکی از مقادیر لیست کشویی فیلد «گروه اول» را در این فیلد وارد نماید.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Country">
+      <label asp-for="Country">کشور</label>
+      <input type="text" asp-for="Country" class="form-control" />
+      <div class="hint">از طریق این فیلد پارامتر «کشور» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Province">
+      <label asp-for="Province">استان</label>
+      <input type="text" asp-for="Province" class="form-control" />
+      <div class="hint">از طریق این فیلد پارامتر «استان» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="City">
+      <label asp-for="City">شهر</label>
+      <input type="text" asp-for="City" class="form-control" />
+      <div class="hint">از طریق این فیلد پارامتر «شهر» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Address">
+      <label asp-for="Address">آدرس</label>
+      <input type="text" asp-for="Address" class="form-control" />
+      <div class="hint">از طریق این فیلد پارامتر «آدرس» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Description">
+      <label asp-for="Description">توضیحات</label>
+      <input type="text" asp-for="Description" class="form-control" />
+      <div class="hint">از طریق این فیلد پارامتر «توضیحات» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="CreatorUser">
+      <label asp-for="CreatorUser">کاربر ایجاد کننده</label>
+      <input type="text" asp-for="CreatorUser" class="form-control"
+        placeholder="@_options.Value.DefaultCreatorUser" />
+      <div class="hint">نام کاربری(Username) که قصد دارید به عنوان کاربر ایجاد کننده انتخاب شود را در این فیلد وارد
+        نمایید.</div>
+    </div>
+  </div>
+</div>
+<hr />
+<div class="row">
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="FirstName">
+      <label asp-for="FirstName">نام</label>
+      <input type="text" asp-for="FirstName" class="form-control" />
+      <div class="hint">از طریق این فیلد پارامتر «نام» پرسنل مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="LastName">
+      <label asp-for="LastName">
+        نام خانوادگی
+        <span class="text-danger">*</span>
+      </label>
+      <input type="text" asp-for="LastName" class="form-control" />
+      <div class="hint">از طریق این فیلد پارامتر «نام خانوادگی» پرسنل مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Mobile">
+      <label asp-for="Mobile">موبایل</label>
+      <input type="text" asp-for="Mobile" class="form-control" />
+      <div class="hint">از طریق این فیلد پارامتر «موبایل» پرسنل مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="NationalId">
+      <label asp-for="NationalId">شناسه ملی</label>
+      <input type="text" asp-for="NationalId" class="form-control" />
+      <span class="hint">شناسه ملی مخاطب در تب «اطلاعات رسمی» را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="EconomicCode">
+      <label asp-for="EconomicCode">کداقتصادی</label>
+      <input type="text" asp-for="EconomicCode" class="form-control" />
+      <span class="hint">کد اقتصادی مخاطب در تب «اطلاعات رسمی» را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="RegisterNumber">
+      <label asp-for="RegisterNumber">شماره ثبت</label>
+      <input type="text" asp-for="RegisterNumber" class="form-control" />
+      <span class="hint">شماره ثبت مخاطب در تب «اطلاعات رسمی» را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="PostalCode">
+      <label asp-for="PostalCode">کد پستی</label>
+      <input type="text" asp-for="PostalCode" class="form-control" />
+      <span class="hint">کد پستی مخاطب را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="CmpEmail">
+      <label asp-for="CmpEmail">ایمیل</label>
+      <input type="text" asp-for="CmpEmail" class="form-control" />
+      <span class="hint">ایمیل مخاطب را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="PostalBox">
+      <label asp-for="PostalBox">صندوق پستی</label>
+      <input type="text" asp-for="PostalBox" class="form-control" />
+      <span class="hint">صندوق پستی مخاطب را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="CmpPhone">
+      <label asp-for="CmpPhone">تلفن</label>
+      <input type="text" asp-for="CmpPhone" class="form-control" />
+      <span class="hint">
+        تلفن مخاطب را از طریق این فیلد مقداردهی کنید. <br />
+        هشت رقم آخر جدا شده و مابقی به عنوان پیش شماره در نظر گرفته خواهد شد.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Job">
+      <label asp-for="Job">سمت</label>
+      <input type="text" asp-for="Job" class="form-control" />
+      <span class="hint">«شناسه» فیلد کشویی سمت پرسنل وارد گردد. <br />
+        در این نسخه از «عنوان» برای مقداردهی این فیلد پشتیبانی نمیشود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Department">
+      <label asp-for="Department">واحد اداری</label>
+      <input type="text" asp-for="Department" class="form-control" />
+      <span class="hint">«شناسه» فیلد کشویی واحد اداری پرسنل وارد گردد. <br />
+        در این نسخه از «عنوان» برای مقداردهی این فیلد پشتیبانی نمیشود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="PrsEmail">
+      <label asp-for="PrsEmail">ایمیل</label>
+      <input type="text" asp-for="PrsEmail" class="form-control" />
+      <span class="hint">ایمیل پرسنل را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="NationalCode">
+      <label asp-for="NationalCode">کد ملی</label>
+      <input type="text" asp-for="NationalCode" class="form-control" />
+      <span class="hint">کد ملی پرسنل را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="PrsAddress">
+      <label asp-for="PrsAddress">آدرس</label>
+      <input type="text" asp-for="PrsAddress" class="form-control" />
+      <span class="hint">آدرس پرسنل را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="PrsDescription">
+      <label asp-for="PrsDescription">توضیحات</label>
+      <input type="text" asp-for="PrsDescription" class="form-control" />
+      <span class="hint">توضیحات پرسنل را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="PrsPhone">
+      <label asp-for="PrsPhone">تلفن</label>
+      <input type="text" asp-for="PrsPhone" class="form-control" />
+      <span class="hint">
+        تلفن پرسنل را از طریق این فیلد مقداردهی کنید. <br />
+        هشت رقم آخر جدا شده و مابقی به عنوان پیش شماره در نظر گرفته خواهد شد.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Prefix">
+      <label asp-for="Prefix">پیشوند متغیرهای خروجی</label>
+      <input type="text" asp-for="Prefix" class="form-control" />
+      <span class="hint">پیشوند متغیرهای خروجی از طریق این فیلد مقداردهی میشوند.</span>
+    </div>
+  </div>
+</div>

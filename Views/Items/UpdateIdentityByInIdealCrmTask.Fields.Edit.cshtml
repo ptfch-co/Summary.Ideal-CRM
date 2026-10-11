@@ -1,0 +1,484 @@
+@using Summary.IdealCrm.Settings;
+
+@model Summary.IdealCrm.Workflows.Task.Identity.UpdateBy.UpdateIdentityByInIdealCrmTaskViewModel
+
+@inject Microsoft.Extensions.Options.IOptions<IdealCrmSettings> _options;
+
+<div class="row">
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="UserName">
+      <label asp-for="UserName">نام کاربری</label>
+      <input type="text" asp-for="UserName" class="form-control" placeholder="@_options.Value.UserName" />
+      <span class="hint">برای دریافت کلید کاربری، تیکت جدیدی در باشگاه مشتریان CRM ایده آل ایجاد کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Password">
+      <label asp-for="Password">گذرواژه</label>
+      <input type="text" asp-for="Password" class="form-control" placeholder="@_options.Value.Password" />
+      <span class="hint">برای دریافت گذرواژه، تیکت جدیدی در باشگاه مشتریان CRM ایده آل ایجاد کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="SearchKind">
+      <label asp-for="SearchKind">نوع جستجو</label>
+      <select asp-for="SearchKind" class="form-control">
+        <option value="Id">شناسه(Id) پرسنل</option>
+        <option value="Mobile">موبایل</option>
+        <option value="Email">ایمیل</option>
+        <option value="NationalCode">کد ملی</option>
+      </select>
+      <span class="hint">از لیست کشویی نوع پارامتر جستجو را تعیین کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Filter">
+      <label asp-for="Filter">عبارت جستجو <span class="text-danger">*</span></label>
+      <input type="text" asp-for="Filter" class="form-control" />
+      <span class="hint">متناسب با فیلتر «نوع جستجو» این فیلد مقداردهی شود.</span>
+    </div>
+  </div>
+</div>
+<hr />
+<div class="row">
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="IdentityType">
+      <label asp-for="IdentityType">ماهیت(حقیقی، حقوقی)</label>
+      <div class="input-group">
+        <input type="text" asp-for="IdentityType" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsIdentityTypeEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">از طریق این فیلد پارامتر «ماهیت» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Subject">
+      <label asp-for="Subject">
+        نام مخاطب
+      </label>
+      <div class="input-group">
+        <input type="text" asp-for="Subject" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsSubjectEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">از طریق این فیلد پارامتر «نام مخاطب» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Type">
+      <label asp-for="Type">
+        نوع مخاطب
+      </label>
+      <div class="input-group">
+        <input type="text" asp-for="Type" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsTypeEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">یکی از مقادیر لیست کشویی فیلد «نوع مخاطب» را در این فیلد وارد نماید.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Country">
+      <label asp-for="Country">کشور</label>
+      <div class="input-group">
+        <input type="text" asp-for="Country" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsCountryEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">از طریق این فیلد پارامتر «کشور» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Province">
+      <label asp-for="Province">استان</label>
+      <div class="input-group">
+        <input type="text" asp-for="Province" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsProvinceEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">از طریق این فیلد پارامتر «استان» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="City">
+      <label asp-for="City">شهر</label>
+      <div class="input-group">
+        <input type="text" asp-for="City" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsCityEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">از طریق این فیلد پارامتر «شهر» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Description">
+      <label asp-for="Description">توضیحات</label>
+      <div class="input-group">
+        <input type="text" asp-for="Description" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsDescriptionEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">از طریق این فیلد پارامتر «توضیحات» مخاطب مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Address">
+      <label asp-for="Address">آدرس</label>
+      <div class="input-group">
+        <input type="text" asp-for="Address" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsAddressEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">از طریق این فیلد پارامتر «آدرس» مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Group">
+      <label asp-for="Group">
+        گروه اول
+      </label>
+      <div class="input-group">
+        <input type="text" asp-for="Group" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsGroupEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">یکی از مقادیر لیست کشویی فیلد «گروه اول» را در این فیلد وارد نماید.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Presentation">
+      <label asp-for="Presentation">
+        نحوه آشنایی
+      </label>
+      <div class="input-group">
+        <input type="text" asp-for="Presentation" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsPresentationEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">یکی از مقادیر لیست کشویی فیلد «نحوه آشنایی» را در این فیلد وارد نماید.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="NationalId">
+      <label asp-for="NationalId">شناسه ملی</label>
+      <div class="input-group">
+        <input type="text" asp-for="NationalId" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsNationalIdEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">شناسه ملی مخاطب در تب «اطلاعات رسمی» را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="EconomicCode">
+      <label asp-for="EconomicCode">کداقتصادی</label>
+      <div class="input-group">
+        <input type="text" asp-for="EconomicCode" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsEconomicCodeEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">کد اقتصادی مخاطب در تب «اطلاعات رسمی» را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="RegisterNumber">
+      <label asp-for="RegisterNumber">شماره ثبت</label>
+      <div class="input-group">
+        <input type="text" asp-for="RegisterNumber" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsRegisterNumberEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">شماره ثبت مخاطب در تب «اطلاعات رسمی» را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="PostalCode">
+      <label asp-for="PostalCode">کد پستی</label>
+      <div class="input-group">
+        <input type="text" asp-for="PostalCode" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsPostalCodeEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">کد پستی مخاطب را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="PostalBox">
+      <label asp-for="PostalBox">صندوق پستی</label>
+      <div class="input-group">
+        <input type="text" asp-for="PostalBox" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsPostalBoxEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">صندوق پستی مخاطب را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="CmpEmail">
+      <label asp-for="CmpEmail">ایمیل</label>
+      <div class="input-group">
+        <input type="text" asp-for="CmpEmail" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsCmpEmailEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">ایمیل مخاطب را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="CmpPhone">
+      <label asp-for="CmpPhone">تلفن</label>
+      <div class="input-group">
+        <input type="text" asp-for="CmpPhone" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsCmpPhoneEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">
+        تلفن مخاطب را از طریق این فیلد مقداردهی کنید. <br />
+        هشت رقم آخر جدا شده و مابقی به عنوان پیش شماره در نظر گرفته خواهد شد.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="AssignTo">
+      <label asp-for="AssignTo">
+        بازاریاب
+      </label>
+      <div class="input-group">
+        <input type="text" asp-for="AssignTo" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsAssignToEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">نام کاربری(UserName) که قصد دارید به عنوان بازاریاب انتخاب شود را در این فیلد وارد
+        نمایید.
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Campaign">
+      <label asp-for="Campaign">
+        کمپین
+      </label>
+      <div class="input-group">
+        <input type="text" asp-for="Campaign" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsCampaignEditable" type="checkbox"
+              title="با فعال کردن این تیک کمپین های پروفایل مخاطب را ویرایش خواهید کرد." />
+          </div>
+          <div class="input-group-text">
+            <input asp-for="AddToCampaign" type="checkbox"
+              title="با انتخاب این گزینه کمپین به لیست کمپین‌های پروفایل مخاطب افزوده می‌شود." />
+          </div>
+        </div>
+      </div>
+      <div class="hint">از طریق «، ,» عنوان کمپین(های) که میخواهید انتخاب شوند را وارد نماید.</div>
+    </div>
+  </div>
+</div>
+<hr />
+<div class="row">
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Mobile">
+      <label asp-for="Mobile">موبایل</label>
+      <div class="input-group">
+        <input type="text" asp-for="Mobile" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsMobileEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">از طریق این فیلد پارامتر «موبایل» پرسنل مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="FirstName">
+      <label asp-for="FirstName">نام</label>
+      <div class="input-group">
+        <input type="text" asp-for="FirstName" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsFirstNameEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">از طریق این فیلد پارامتر «نام» پرسنل مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="LastName">
+      <label asp-for="LastName">
+        نام خانوادگی
+      </label>
+      <div class="input-group">
+        <input type="text" asp-for="LastName" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsLastNameEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <div class="hint">از طریق این فیلد پارامتر «نام خانوادگی» پرسنل مقداردهی میشود.</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Job">
+      <label asp-for="Job">سمت</label>
+      <div class="input-group">
+        <input type="text" asp-for="Job" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsJobEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">«شناسه» فیلد کشویی سمت پرسنل وارد گردد. <br />
+        در این نسخه از «عنوان» برای مقداردهی این فیلد پشتیبانی نمیشود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Department">
+      <label asp-for="Department">واحد اداری</label>
+      <div class="input-group">
+        <input type="text" asp-for="Department" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsDepartmentEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">«شناسه» فیلد کشویی واحد اداری پرسنل وارد گردد. <br />
+        در این نسخه از «عنوان» برای مقداردهی این فیلد پشتیبانی نمیشود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="PrsEmail">
+      <label asp-for="PrsEmail">ایمیل</label>
+      <div class="input-group">
+        <input type="text" asp-for="PrsEmail" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsPrsEmailEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">ایمیل پرسنل را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="NationalCode">
+      <label asp-for="NationalCode">کد ملی</label>
+      <div class="input-group">
+        <input type="text" asp-for="NationalCode" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsNationalCodeEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">کد ملی پرسنل را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="PrsAddress">
+      <label asp-for="PrsAddress">آدرس</label>
+      <div class="input-group">
+        <input type="text" asp-for="PrsAddress" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsPrsAddressEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">آدرس پرسنل را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="PrsDescription">
+      <label asp-for="PrsDescription">توضیحات</label>
+      <div class="input-group">
+        <input type="text" asp-for="PrsDescription" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsPrsDescriptionEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">توضیحات پرسنل را از طریق این فیلد مقداردهی کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="PrsPhone">
+      <label asp-for="PrsPhone">تلفن</label>
+      <div class="input-group">
+        <input type="text" asp-for="PrsPhone" class="form-control" />
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input asp-for="IsPrsPhoneEditable" type="checkbox" />
+          </div>
+        </div>
+      </div>
+      <span class="hint">
+        تلفن پرسنل را از طریق این فیلد مقداردهی کنید. <br />
+        هشت رقم آخر جدا شده و مابقی به عنوان پیش شماره در نظر گرفته خواهد شد.
+      </span>
+    </div>
+  </div>
+</div>

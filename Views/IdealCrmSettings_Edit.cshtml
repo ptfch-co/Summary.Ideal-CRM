@@ -1,0 +1,62 @@
+@model Summary.IdealCrm.Settings.IdealCrmSettings
+
+<div class="row">
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="ApiAddress">آدرس وب سرویس:</label>
+      <input class="form-control" type="text" asp-for="ApiAddress" />
+    </div>
+    <div class="form-group">
+      <label asp-for="ProvinceId">شناسه استان:</label>
+      <input class="form-control" type="text" asp-for="ProvinceId" />
+    </div>
+    <div class="form-group">
+      <label asp-for="NumberOfEventsPerRequest">تعداد رخداد به ازای هر درخواست؟</label>
+      <input class="form-control" type="number" asp-for="NumberOfEventsPerRequest" />
+      <span class="hint">
+        مجموع تعداد فرم‌های که در 30 ثانیه بروزرسانی میشوند.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="UserName">نام کاربری:</label>
+      <input class="form-control" type="text" asp-for="UserName" />
+    </div>
+    <div class="form-group">
+      <label asp-for="CityId">شناسه شهر:</label>
+      <input class="form-control" type="text" asp-for="CityId" />
+    </div>
+    <div class="form-group">
+      <label asp-for="AllowToRunCUIdentityEvent">رویداد ایجاد و ویرایش مخاطب</label>
+      <select class="form-control" asp-for="AllowToRunCUIdentityEvent">
+        <option value="true">بله</option>
+        <option value="false">خیر</option>
+      </select>
+      <span class="hint">
+        در صورت غیرفعال سازی، فرآیند ایجاد و بروزرسانی مخاطب متوقف میشود.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="Password">گذرواژه:</label>
+      <input class="form-control" type="text" asp-for="Password" />
+    </div>
+    <div class="form-group">
+      <label asp-for="DefaultCreatorUser">کاربر ایجاد کننده پیشفرض:</label>
+      <input class="form-control" type="text" asp-for="DefaultCreatorUser" />
+      <span class="hint">«کاربر ایجاد کننده» پیشفرضِ تمامی تسک‌های ایجاد را از طریق این فیلد تعیین کنید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label asp-for="ConnectionString">کانکشن استرینگ:</label>
+      <input class="form-control" type="text" asp-for="ConnectionString" />
+    </div>
+    <div class="form-group">
+      <label asp-for="CountryId">شناسه کشور:</label>
+      <input class="form-control" type="text" asp-for="CountryId" />
+    </div>
+  </div>
+</div>
