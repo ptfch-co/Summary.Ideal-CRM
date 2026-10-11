@@ -11,7 +11,6 @@ namespace Summary.IdealCrm
             internal const string GetPersonDetailsBy = "Summary.IdealCrm.Task.GetPerosnDetailsBy";
             internal const string UpdateProjectBy = "Summary.IdealCrm.Task.UpdateProjectBy";
             internal const string GetProjectDetailsBy = "Summary.IdealCrm.Task.GetProjectDetails";
-            internal const string CreateQuote = "Summary.IdealCrm.Task.CreateQuote";
             internal const string UpdateIdentityBy = "Summary.IdealCrm.Task.Identity.UpdateBy";
             internal const string CUIdentityEvent = "Summary.Ideal.CRM.Workflows.Event.Identity.CU";
         }

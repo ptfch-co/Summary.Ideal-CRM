@@ -80,16 +80,6 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="ExpireDateTime">
-            <label asp-for="ExpireDateTime">تاریخ انقضاء</label>
-            <input type="text" asp-for="ExpireDateTime" class="form-control" />
-            <span class="hint">
-                تاریخ انقضاء پیش فاکتور را از طریق این فیلد مقداردهی کنید.</br>
-                نمونه قالب: "yyyy/MM/dd HH:mm:ss"
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
         <div class="form-group" asp-validation-class-for="Subject">
             <label asp-for="Subject">
                 موضوع
@@ -120,37 +110,10 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="DiscountPercent">
-            <label asp-for="DiscountPercent">درصد تخفیف</label>
-            <input type="text" asp-for="DiscountPercent" class="form-control" />
-            <span class="hint">
-                درصد تخفیف کل فاکتور را از طریق این فیلد مقداردهی کنید.
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
         <div class="form-group" asp-validation-class-for="DiscountTitle">
             <label asp-for="DiscountTitle">شرح تخفیف</label>
             <input type="text" asp-for="DiscountTitle" class="form-control" />
             <span class="hint">شرح تخفیف را از طریق این فیلد مقداردهی کنید.</span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="TaxPercent">
-            <label asp-for="TaxPercent">درصد مالیات</label>
-            <input type="text" asp-for="TaxPercent" class="form-control" />
-            <span class="hint">
-                درصد مایلات کل فاکتور را از طریق این فیلد مقداردهی کنید.
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="Round">
-            <label asp-for="Round">کسر رند</label>
-            <input type="text" asp-for="Round" class="form-control" />
-            <span class="hint">
-                کسر رند را از طریق این فیلد مقداردهی کنید.
-            </span>
         </div>
     </div>
     <div class="col-md-3">
@@ -162,13 +125,6 @@
             <span class="hint">
                 قالب فرمت: "بله"، "خیر"، "1"، "0"، "False"، "True"
             </span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="UserVerified">
-            <label asp-for="UserVerified">کاربر تایید کننده</label>
-            <input type="text" asp-for="UserVerified" class="form-control" />
-            <span class="hint">مقدار این فیلد میتواند به صورت «شناسه کاربری» یا «نام کاربری» وارد شود.</span>
         </div>
     </div>
     <div class="col-md-3">
@@ -199,67 +155,11 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="Warranty">
-            <label asp-for="Warranty">
-                گارانتی
-            </label>
-            <input type="text" asp-for="Warranty" class="form-control" />
-            <span class="hint">
-                مقدار این فیلد میتواند به صورت «شناسه» یا «عنوان» وارد شود.
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
         <div class="form-group" asp-validation-class-for="PayCondition">
             <label asp-for="PayCondition">شرایط پرداخت</label>
             <input type="text" asp-for="PayCondition" class="form-control" />
             <span class="hint">
                 مقدار این فیلد میتواند به صورت «شناسه» یا «عنوان» وارد شود.
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="DeliveryTimeKind">
-            <label asp-for="DeliveryTimeKind">زمان تحویل</label>
-            <input type="text" asp-for="DeliveryTimeKind" class="form-control" />
-            <span class="hint">
-                مقدار این فیلد میتواند به صورت «شناسه» یا «عنوان» وارد شود.
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="DeliveryDateTime">
-            <label asp-for="DeliveryDateTime">تاریخ و زمان تحویل</label>
-            <input type="text" asp-for="DeliveryDateTime" class="form-control" />
-            <span class="hint">
-                نمونه قالب: "yyyy/MM/dd HH:mm:ss"
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="DeliveryEndDateTime">
-            <label asp-for="DeliveryEndDateTime">تاریخ و زمان پایان تحویل</label>
-            <input type="text" asp-for="DeliveryEndDateTime" class="form-control" />
-            <span class="hint">
-                نمونه قالب: "yyyy/MM/dd HH:mm:ss"
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="CreditDuration">
-            <label asp-for="CreditDuration">مدت اعتبار</label>
-            <input type="text" asp-for="CreditDuration" class="form-control" />
-            <span class="hint">
-                مقدار این فیلد میتواند به صورت «شناسه» یا «عنوان» وارد شود.
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="SpecialWord">
-            <label asp-for="SpecialWord">کلمه ویژه</label>
-            <input type="text" asp-for="SpecialWord" class="form-control" />
-            <span class="hint">
-                کلمه ویژه را از طریق این فیلد مقدار دهی کنید.
             </span>
         </div>
     </div>
@@ -311,24 +211,6 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="AccountNumber2">
-            <label asp-for="AccountNumber2">شماره حساب 2</label>
-            <input type="text" asp-for="AccountNumber2" class="form-control" />
-            <span class="hint">
-                شماره حساب 2 را از طریق این فیلد مقداردهی کنید.
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="ShabaNumber2">
-            <label asp-for="ShabaNumber2">شماره شبا 2</label>
-            <input type="text" asp-for="ShabaNumber2" class="form-control" />
-            <span class="hint">
-                شماره شبا 2 را از طریق این فیلد مقداردهی کنید.
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
         <div class="form-group" asp-validation-class-for="Address">
             <label asp-for="Address">آدرس</label>
             <input type="text" asp-for="Address" class="form-control" />
@@ -343,17 +225,6 @@
             <input type="text" asp-for="Telephone" class="form-control" />
             <span class="hint">
                  تلفن را از طریق این فیلد مقداردهی کنید.
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="Fax">
-            <label asp-for="Fax">
-                فکس
-            </label>
-            <input type="text" asp-for="Fax" class="form-control" />
-            <span class="hint">
-                 فکس را از طریق این فیلد مقداردهی کنید.
             </span>
         </div>
     </div>
@@ -399,6 +270,15 @@
         </div>
     </div>
     <div class="col-md-3">
+        <div class="form-group" asp-validation-class-for="TotalDiscount">
+            <label>تخفیف کل</label>
+            <input type="text" asp-for="TotalDiscount" class="form-control" />
+            <span class="hint">
+              اگر سفارشی که قصد دارید به صورت پیش فاکتور در CRM ایده آل ثبت شود دارای تخفیف کل است، از طریق این فیلد تخفیف کل را مقداردهی کنید.
+            </span>
+        </div>
+    </div>
+    <div class="col-md-3">
         <div class="form-group" asp-validation-class-for="OutputQuote">
             <label asp-for="OutputQuote">
                 شناسه متغیرهای خروجی پیش فاکتور
@@ -406,74 +286,6 @@
             <input type="text" asp-for="OutputQuote" class="form-control" placeholder="Output.Ideal.Quote"/>
             <span class="hint">
                 پیشوند متغیرهای خروجی پیش فاکتور از طریق این فیلد مقداردهی میشوند.
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group" asp-validation-class-for="CreatePayment">
-            <label asp-for="CreatePayment">آیا سند پردختی متناسب با پیش فاکتور ایجاد شود؟</label>
-            <select asp-for="CreatePayment" class="form-control">
-                <option value="true">بله</option>
-                <option value="false">خیر</option>
-            </select>
-            <span class="hint">از طریق این فیلد، ایجاد/عدم ایجاد سند مرتبط با فاکتور را مشخص کنید.</span>
-        </div>
-    </div>
-</div>
-<hr>
-<div class="row">
-    <div class="col-md-3">
-        <div class="form-group">
-            <label asp-for="PayType">نحوه پرداخت</label>
-            <input type="text" asp-for="PayType" class="form-control" />
-            <span class="hint">مقدار این فیلد میبایست از طریق «شناسه کاربری» تعیین شود.</span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label asp-for="PayAmount">مبلغ پرداختی</label>
-            <input type="text" asp-for="PayAmount" class="form-control" />
-            <span class="hint">مبلغ پرداختی را از طریق این فیلد مقداردهی کنید.</span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label asp-for="PayNumber">شماره سند</label>
-            <input type="text" asp-for="PayNumber" class="form-control" />
-            <span class="hint">شماره سند را از طریق این فیلد مقداردهی کنید.</span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label asp-for="PayDescription">شرح سند</label>
-            <input type="text" asp-for="PayDescription" class="form-control" />
-            <span class="hint">شرح سند را از طریق این فیلد مقداردهی کنید.</span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label asp-for="PayDate">تاریخ و زمان سند</label>
-            <input type="text" asp-for="PayDate" class="form-control" />
-            <span class="hint">
-                تاریخ و زمان سند را ازطریق این فیلد مقداردهی کنید.
-                </br>
-                نمونه قالب: "yyyy/MM/dd HH:mm:ss"
-            </span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label asp-for="DocumentAmount">مبلغ سند</label>
-            <input type="text" asp-for="DocumentAmount" class="form-control" />
-            <span class="hint">مبلغ سند را از طریق این فیلد مقداردهی کنید.</span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label asp-for="OutputPayment">شناسه متغیرهای خروجی سند پرداختی</label>
-            <input type="text" asp-for="OutputPayment" class="form-control" placeholder="Output.Ideal.Quote.Payment" />
-            <span class="hint">
-                پیشوند متغیرهای خروجی سند پرداختی از طریق این فیلد مقداردهی میشوند.
             </span>
         </div>
     </div>

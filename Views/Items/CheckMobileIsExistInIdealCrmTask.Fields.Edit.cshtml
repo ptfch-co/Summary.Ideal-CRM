@@ -4,11 +4,23 @@
   <div class="col-md-3">
     <div class="form-group" asp-validation-class-for="Mobile">
       <label asp-for="Mobile">
-        شماره همراه
+        فیلتر
         <span class="text-danger">*</span>
       </label>
-      <input type="text" asp-for="Mobile" class="form-control" />
-      <span class="hint">از طریق این فیلد تکراری بودن شماره همراه بررسی میشود.</span>
+      <select class="form-control">
+          <option>شماره همراه</option>
+      </select>
+      <span class="hint">از طریق این فیلتر نوع جستجو پروفایل حقیقی و حقوقی را تعیین نمایید.</span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group" asp-validation-class-for="Mobile">
+        <label asp-for="Mobile">
+          عبارت جستجو
+          <span class="text-danger">*</span>
+        </label>
+        <input type="text" asp-for="Mobile" class="form-control" />
+        <span class="hint">با توجه به نوع فیلد فیلتر، در این فیلد عبارت جستجو را مشخص نمایید.</span>
     </div>
   </div>
 </div>

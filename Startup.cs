@@ -13,6 +13,7 @@ namespace Summary.IdealCrm
     using Summary.IdealCrm.Workflows.Task.Conversation.Create;
     using Summary.IdealCrm.Workflows.Task.MobileIsExist;
     using Summary.IdealCrm.Workflows.Task.Project.Create;
+    using Summary.IdealCrm.Workflows.Task.Quote.Create;
 
     [Feature(IdealCrm.Features.IdealCrm)]
     public class Startup : StartupBase
@@ -35,6 +36,7 @@ namespace Summary.IdealCrm
             services.AddActivity<CheckMobileIsExistInIdealCrmTask, CheckMobileIsExistInIdealCrmTaskDisplay>();
             services.AddActivity<CreateProjectInIdealCrmTask, CreateProjectInIdealCrmTaskDisplay>();
             services.AddActivity<CreateConversationInIdealCrmTask, CreateConversationInIdealCrmTaskDisplay>();
+            services.AddActivity<CreateQuoteInIdealCrmTask, CreateQuoteInIdealCrmTaskDisplay>();
         }
     }
 }
