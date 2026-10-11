@@ -23,39 +23,26 @@ namespace Summary.IdealCrm.Services
             string title,
             string number,
             DateTime? date,
-            DateTime? expireDateTime,
             string subject,
-            string discountPercent,
             string discountTitle,
-            string taxPercent,
-            string round,
             bool isVerified,
-            string userVerified,
             string status,
             string group,
             bool isFixed,
-            string warranty,
             string payCondition,
-            string deliveryTimeKind,
-            DateTime? deliveryDateTime,
-            DateTime? deliveryEndDateTime,
-            string creditDuration,
-            string specialWord,
             string description,
             string description2,
             string printFormat,
             string accountNumber,
             string shabaNumber,
-            string accountNumber2,
-            string shabaNumber2,
             string address,
             string telephone,
-            string fax,
             string website,
             string email,
             string transportation,
             string referUser,
-            string creatorUser
+            string creatorUser,
+            long total_discount
         );
 
         Task InsertItemAsync(
@@ -114,154 +101,73 @@ namespace Summary.IdealCrm.Services
             string title,
             string number,
             DateTime? date,
-            DateTime? expireDateTime,
             string subject,
-            string discountPercent,
             string discountTitle,
-            string taxPercent,
-            string round,
             bool isVerified,
-            string userVerified,
             string status,
             string group,
             bool isFixed,
-            string warranty,
             string payCondition,
-            string deliveryTimeKind,
-            DateTime? deliveryDateTime,
-            DateTime? deliveryEndDateTime,
-            string creditDuration,
-            string specialWord,
             string description,
             string description2,
             string printFormat,
             string accountNumber,
             string shabaNumber,
-            string accountNumber2,
-            string shabaNumber2,
             string address,
             string telephone,
-            string fax,
             string website,
             string email,
             string transportation,
             string referUser,
-            string creatorUser)
+            string creatorUser,
+            long total_discount)
         {
             userName = String.IsNullOrWhiteSpace(userName) ? _options.UserName : userName;
             password = String.IsNullOrWhiteSpace(password) ? _options.Password : password;
             creatorUser = String.IsNullOrWhiteSpace(creatorUser) ? _options.DefaultCreatorUser : creatorUser;
 
-            int? creditDurationId = null;
-            int? deliveryTimeKindId = null;
-            int? warrantyId = null;
-            int? payConditionId = null;
-            int? groupId = null;
-            int? statusId = null;
+            int? status_id = null;
             int? printFormatId = null;
-            int? referUserId = null;
-            int? userVerifiedId = null;
-            int? creatorUserId = null;
+            int? creator_user_id = null;
 
             if (date.HasValue == false) date = DateTime.Now;
 
-            if (String.IsNullOrWhiteSpace(creditDuration) == false)
-            {
-                creditDurationId = creditDuration.ConvertTo<int>() ?? await GetCreditDurationIdAsync(userName, password, creditDuration);
-            }
+            if (String.IsNullOrWhiteSpace(status) == false) status_id =
+                status.ConvertTo<int>() ?? await GetStatusIdAsync(userName, password, status);
 
-            if (String.IsNullOrWhiteSpace(deliveryTimeKind) == false)
-            {
-                deliveryTimeKindId = deliveryTimeKind.ConvertTo<int>() ?? await GetDeliveryTimeKindIdAsync(userName, password, deliveryTimeKind);
-            }
+            if (String.IsNullOrWhiteSpace(printFormat) == false) printFormatId =
+                printFormat.ConvertTo<int>() ?? await GetPrintFormatIdAsync(userName, password, printFormat);
 
-            if (String.IsNullOrWhiteSpace(warranty) == false)
-            {
-                warrantyId = warranty.ConvertTo<int>() ?? await GetWarrantyIdAsync(userName, password, warranty);
-            }
-
-            if (String.IsNullOrWhiteSpace(payCondition) == false)
-            {
-                payConditionId = payCondition.ConvertTo<int>() ?? await GetPayConditionIdAsync(userName, password, payCondition);
-            }
-
-            if (String.IsNullOrWhiteSpace(group) == false)
-            {
-                groupId = group.ConvertTo<int>() ?? await GetGroupIdAsync(userName, password, group);
-            }
-
-            if (String.IsNullOrWhiteSpace(status) == false)
-            {
-                statusId = status.ConvertTo<int>() ?? await GetStatusIdAsync(userName, password, status);
-            }
-
-            if (String.IsNullOrWhiteSpace(printFormat) == false)
-            {
-                printFormatId = printFormat.ConvertTo<int>() ?? await GetPrintFormatIdAsync(userName, password, printFormat);
-            }
-
-            if (String.IsNullOrWhiteSpace(referUser) == false)
-            {
-                referUserId = referUser.ConvertTo<int>() ?? await _user.GetUserIdAsync(referUser);
-            }
-
-            if (String.IsNullOrWhiteSpace(userVerified) == false)
-            {
-                userVerifiedId = userVerified.ConvertTo<int>() ?? await _user.GetUserIdAsync(userVerified);
-            }
-
-            if (String.IsNullOrWhiteSpace(creatorUser) == false)
-            {
-                creatorUserId = creatorUser.ConvertTo<int>() ?? await _user.GetUserIdAsync(creatorUser);
-            }
+            if (String.IsNullOrWhiteSpace(creatorUser) == false) creator_user_id =
+                creatorUser.ConvertTo<int>() ?? await _user.GetUserIdAsync(creatorUser);
 
             var data = new
             {
                 UserName = userName,
                 Password = password,
-                ApiCompanyId = company,
-                ApiCompanyPersonId = personnel,
-                ApiProjectId = project,
                 ApiPordTitle = title,
                 ApiPordNumber = number,
                 ApiPordDate = date.Value.ToString("yyyy/MM/dd HH:mm:ss", new CultureInfo("en-US")),
-                ApiPordExpireDate = expireDateTime?.ToString("yyyy/MM/dd", new CultureInfo("en-US")),
-                ApiPordExpireTime = expireDateTime?.ToString("HH:mm:ss"),
+                ApiCompanyId = company,
+                ApiCompanyPersonId = personnel,
+                ApiProjectId = project,
+                ApiPordDiscount = total_discount,
                 ApiPordSubject = subject,
-                ApiPordDiscountPercent = discountPercent,
-                ApiPordDiscountTitle = discountTitle,
-                ApiPordTaxIndex = taxPercent,
-                ApiPordCalculateTax = taxPercent.ConvertTo<int>() > 0,
-                ApiPordRound = round,
-                ApiPordIsVerified = isVerified,
-                ApiPordVerifierId = userVerifiedId,
-                ApiPordStatusId = statusId,
-                ApiPordOprId = groupId,
-                ApiPordIsFixed = isFixed,
-                ApiPordGuarantyId = warrantyId,
-                ApiPordPayConditionId = payConditionId,
-                ApiPordDeliveryTimeId = deliveryTimeKindId,
-                ApiPordDeliveryDate = deliveryDateTime?.ToString("yyyy/MM/dd", new CultureInfo("en-US")),
-                ApiPordDeliveryTime = deliveryDateTime?.ToString("HH:mm:ss"),
-                ApiPordDeliveryEndDate = deliveryDateTime?.ToString("yyyy/MM/dd", new CultureInfo("en-US")),
-                ApiPordDeliveryEndTime = deliveryDateTime?.ToString("HH:mm:ss"),
-                ApiPordCreditDurationId = creditDurationId,
-                ApiPordSpecialWord = specialWord,
+                ApiPordCalculateTax = false,
+                ApiPordRound = 0,
+                ApiPordStatusId = status_id,
                 ApiPordDescriptionI = description,
                 ApiPordDescriptionII = description2,
                 ApiPordPrintFormatId = printFormatId,
                 ApiPordAccountNumberI = accountNumber,
-                ApiPordAccountNumberII = accountNumber2,
                 ApiPordAccountShabaNumberI = shabaNumber,
-                ApiPordAccountShabaNumberII = shabaNumber2,
                 ApiPordAddress = address,
                 ApiPordTelephone = telephone,
-                ApiPordFax = fax,
                 ApiPordWebSite = website,
                 ApiPordEmail = email,
                 ApiPordTransportation = transportation,
-                ApiPordReferUserId = referUserId,
-                UserId = creatorUserId
+                ApiPordReferUserId = creator_user_id,
+                UserId = creator_user_id
             };
 
             var quote_response = await _client.SendPostRequestAsync<CreateQuoteResponseModel>(
@@ -286,10 +192,10 @@ namespace Summary.IdealCrm.Services
             int quote,
             string code,
             int count,
-            float basePrice,
-            float finalPrice,
+            float base_unit_price,
+            float total_price,
             string inventoryCode,
-            float baseDiscount,
+            float discount,
             float baseTax,
             string creatorUser,
             string description)
@@ -327,16 +233,16 @@ namespace Summary.IdealCrm.Services
                 ApiPreOrderId = quote,
                 ApiPordIPrdId = product.ApiProductID,
                 ApiPordIQuantity = count,
-                ApiPordIPrice = basePrice,
-                ApiPordIPriceSum = basePrice * count,
-                ApiPordITotalPrice = finalPrice,
-                ApiPordIDiscount = baseDiscount,
-                ApiPordIDiscountSum = baseDiscount,
-                ApiPordITax = baseTax,
-                ApiPordITaxSum = baseTax,
+                ApiPordIPrice = base_unit_price,
+                ApiPordITotalPrice = total_price,
+                ApiPordIDiscount = discount,
+                ApiPordIDiscountPercent = ((decimal)discount / (decimal)base_unit_price) * 100,
+                ApiPordIPrdUnitId = 1,
+                ApiPordICurrencyUnitId = 1,
                 ApiPordIWHId = inventoryCode,
                 UserId = creatorUserId,
-                ApiPordIDescription = description
+                ApiPordIPriceSum = total_price,
+                ApiPordIDiscountSum = discount * count
             };
 
             var item_response = await _client.SendPostRequestAsync<BaseResultModel>(
