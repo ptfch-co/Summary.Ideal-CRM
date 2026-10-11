@@ -44,18 +44,21 @@ namespace Summary.IdealCrm.Services
         private readonly IdealCrmSettings _options;
         private readonly IProjectService _project;
         private readonly ILogger<ConversationService> _logger;
+        private readonly IUserService _user;
 
         public ConversationService(HttpRequestClient client,
             IDbConnectionAccessor db,
             IOptions<IdealCrmSettings> options,
             IProjectService project,
-            ILogger<ConversationService> logger)
+            ILogger<ConversationService> logger,
+            IUserService user)
         {
             _client = client;
             _db = db;
             _options = options.Value;
             _project = project;
             _logger = logger;
+            _user = user;
         }
 
         private async Task<IList<ConversationStatusInfo>> GetStatusAsync(
@@ -154,26 +157,6 @@ namespace Summary.IdealCrm.Services
             return types.Data.First(x => x.ApiTopic.Equals(name)).ApiConversationTopicsID;
         }
 
-        private async Task<int> GetUserIdByAsync(
-            string userName,
-            string password,
-            string name)
-        {
-            var user = await _client.SendPostRequestAsync<BaseInformationResultModel<UserInfo>>(
-                $"{_options.ApiAddress}/Api/ApiUser/Select",
-                new
-                {
-                    UserName = userName,
-                    Password = password,
-                    ApiUserName = name
-                },
-                null,
-                "application/x-www-form-urlencoded"
-            );
-
-            return user.Data.Single().ApiUserId;
-        }
-
         public async Task<string> CreateAsync(
             string userName,
             string password,
@@ -235,21 +218,15 @@ namespace Summary.IdealCrm.Services
                 type
             );
 
-            int creatorUserId = creatorUser.ConvertTo<int>() ?? await GetUserIdByAsync(
-                userName,
-                password,
+            int creatorUserId = creatorUser.ConvertTo<int>() ?? await _user.GetUserIdAsync(
                 creatorUser
             );
 
-            int referUserId = referUser.ConvertTo<int>() ?? await GetUserIdByAsync(
-                userName,
-                password,
+            int referUserId = referUser.ConvertTo<int>() ?? await _user.GetUserIdAsync(
                 referUser
             );
 
-            int _creatorUserId = _creatorUser.ConvertTo<int>() ?? await GetUserIdByAsync(
-                userName,
-                password,
+            int _creatorUserId = _creatorUser.ConvertTo<int>() ?? await _user.GetUserIdAsync(
                 _creatorUser
             );
 
