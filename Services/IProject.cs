@@ -118,20 +118,20 @@ namespace Summary.IdealCrm.Services
             {
                 case ProjectSearchKind.Title: data.Add("ApiPrjTitle", filter); break;
                 case ProjectSearchKind.InquiryNumber:
-                {
-                    using (var connection = _db.CreateConnection())
                     {
-                        connection.ConnectionString = _options.ConnectionString;
-                        await connection.OpenAsync();
-                        using (var transaction = connection.BeginTransaction())
+                        using (var connection = _db.CreateConnection())
                         {
-                            var query = $"select p.ProjectID from dbo.CrmProjects as p where  p.prjInquiryNum = '{filter}';";
-                            int? id = await connection.QueryFirstOrDefaultAsync<int?>(query, null, transaction);
+                            connection.ConnectionString = _options.ConnectionString;
+                            await connection.OpenAsync();
+                            using (var transaction = connection.BeginTransaction())
+                            {
+                                var query = $"select p.ProjectID from dbo.CrmProjects as p where  p.prjInquiryNum = '{filter}';";
+                                int? id = await connection.QueryFirstOrDefaultAsync<int?>(query, null, transaction);
 
-                            return id?.ToString();
+                                return id?.ToString();
+                            }
                         }
                     }
-                }
                 default:
                     throw new ArgumentOutOfRangeException(nameof(searchKind));
             }
@@ -272,14 +272,13 @@ namespace Summary.IdealCrm.Services
             int groupId = group.ConvertTo<int>() ?? await GetGroupIdAsync(userName, password, group);
             int? cnvsStatusGroupId = cnvsStatusGroup.ConvertTo<int>() ?? await GetConversationStatusGroupIdAsync(cnvsStatusGroup);
             int starterUserId = starterUser.ConvertTo<int>() ?? await _user.GetUserIdAsync(starterUser);
-            int? presentationId = cmpPresentation.ConvertTo<int>() ?? await _identity.GetPresentationIdByAsync(cmpPresentation);
             int? creatorUserId = null;
 
             if (String.IsNullOrWhiteSpace(creatorUser) is false)
             {
                 creatorUserId = creatorUser.ConvertTo<int>() ?? await _user.GetUserIdAsync(creatorUser);
             }
-
+            int? presentationId = cmpPresentation.ConvertTo<int>() ?? await _identity.GetOrCreatePresentationIdAsync(cmpPresentation, creatorUserId);
             IEnumerable<string> campaign_ids = null;
 
             if (String.IsNullOrWhiteSpace(campaign) is false)
@@ -462,11 +461,11 @@ namespace Summary.IdealCrm.Services
             {
                 data.Add(
                     "ApiPrjCmpPresentationId",
-                    cmpPresentation.ConvertTo<int>() ?? await _identity.GetPresentationIdByAsync(cmpPresentation)
+                    cmpPresentation.ConvertTo<int>() ?? await _identity.GetOrCreatePresentationIdAsync(cmpPresentation, user_id)
                 );
             }
 
-            if(IsFinishedEditable) data.Add("ApiPrjIsFinished", isFinished);
+            if (IsFinishedEditable) data.Add("ApiPrjIsFinished", isFinished);
 
             var proj_response = await _client.SendPostRequestAsync<BaseResultModel>(
                 $"{_options.ApiAddress}/Api/ApiProject/Update",

@@ -90,7 +90,7 @@ namespace Summary.IdealCrm.Services
         );
         Task<IList<IdentityResponseInfo>> SyncAndGetUpdatedAsync();
         Task Synced(int id);
-        Task<int?> GetPresentationIdByAsync(string filter);
+        Task<int?> GetOrCreatePresentationIdAsync(string filter, int? userId);
     }
 
     public class IdentityService : BaseService, IIdentityService
@@ -141,8 +141,12 @@ namespace Summary.IdealCrm.Services
             return person.Data.Any();
         }
 
-        public async Task<int?> GetPresentationIdByAsync(string filter)
+        public async Task<int?> GetOrCreatePresentationIdAsync(string filter, int? userId)
         {
+
+            if (string.IsNullOrWhiteSpace(filter))
+                return null;
+
             var url = $"{_options.ApiAddress}/Api/ApiBaseInfo/SelectCompanyPresentation";
 
             var data = new
@@ -162,7 +166,55 @@ namespace Summary.IdealCrm.Services
                 response.Message
             );
 
-            return response.Data.FirstOrDefault(x => x.ApiPresentation == filter.Trim())?.ApiCompanyPresentationId;
+            var presentationName = filter.Trim();
+            // بررسی وجود نحوه آشنایی در فهرست دریافتی
+            var presentationId = response.Data?
+                .FirstOrDefault(x => x.ApiPresentation == presentationName)
+                ?.ApiCompanyPresentationId;
+
+            if (presentationId.HasValue)
+                return presentationId.Value;
+            // بررسی شناسه کاربر ایجادکننده پیش از ثبت نحوه آشنایی جدید
+            if (!userId.HasValue)
+            {
+                throw new WorkflowException(
+                    "شناسه کاربر برای ایجاد نحوه آشنایی مشخص نیست",
+                    null,
+                    null
+                );
+            }
+            // ایجاد نحوه آشنایی در صورت پیدا نشدن مورد مشابه
+            var createUrl = $"{_options.ApiAddress}/Api/ApiBaseInfo/InsertCompanyPresentation";
+            var createData = new
+            {
+                UserName = _options.UserName,
+                Password = _options.Password,
+                ApiPresentation = presentationName,
+                UserId = userId
+            };
+
+            var createResponse = await _client.SendPostRequestAsync<BaseResultModel>(
+                createUrl,
+                createData
+            );
+
+            if (createResponse.Status == Status.Error)
+            {
+                throw new WorkflowException(
+                    "خطا در ایجاد نحوه آشنایی",
+                    null,
+                    createResponse.Message
+                );
+            }
+            // استخراج و بازگرداندن شناسه نحوه آشنایی ایجادشده
+            if (int.TryParse(createResponse.Data, out var newPresentationId))
+                return newPresentationId;
+
+            throw new WorkflowException(
+                "شناسه نحوه آشنایی ایجادشده معتبر نیست",
+                null,
+                createResponse.Message
+            );
         }
 
         private async Task<int?> GetCompanyTypeIdByAsync(string filter)
@@ -348,8 +400,6 @@ namespace Summary.IdealCrm.Services
             org.CreatorUser = person.CreatorUser = String.IsNullOrWhiteSpace(org.CreatorUser) ? _options.DefaultCreatorUser : org.CreatorUser;
             // Identity type is person or organization?
             org.IdentityType = org.IdentityType.Equals("حقیقی", StringComparison.InvariantCultureIgnoreCase) ? "1" : "0";
-            // Fetch presentation ID
-            var presentationId = await GetPresentationIdByAsync(org.Presentation);
             // Fetch company type ID
             var companyTypeId = await GetCompanyTypeIdByAsync(org.Type);
             // Fetch company group ID
@@ -366,6 +416,8 @@ namespace Summary.IdealCrm.Services
             {
                 creatorUserIdOrg = await _user.GetUserIdAsync(org.CreatorUser);
             }
+            // Fetch presentation ID
+            var presentationId = await GetOrCreatePresentationIdAsync(org.Presentation, creatorUserIdOrg);
             // واکشی شناسه کاربر ایجاد کننده پرسنل
             int? creatorUserIdPerson = person.CreatorUser.ConvertTo<int>();
             if (creatorUserIdPerson.HasValue is false && String.IsNullOrWhiteSpace(person.CreatorUser) is false)
@@ -595,7 +647,7 @@ namespace Summary.IdealCrm.Services
             }
             if (isDescriptionEditable) companyData.Add("ApiCmpDescription", description);
             if (isAddressEditable) companyData.Add("ApiCmpAddress", address);
-            if (isPresentationEditable) companyData.Add("ApiCmpPresentationId", await GetPresentationIdByAsync(presentation));
+            if (isPresentationEditable) companyData.Add("ApiCmpPresentationId", await GetOrCreatePresentationIdAsync(presentation, personDetails.ApiUserId));
             if (isNationalIdEditable) companyData.Add("ApiCmpNationalCode", nationalId);
             if (isEconomicCodeEditable) companyData.Add("ApiCmpEconomicCode", economicCode);
             if (isRegisterNumberEditable) companyData.Add("ApiCmpRegistrationNumber", registerNumber);
@@ -731,7 +783,7 @@ namespace Summary.IdealCrm.Services
                 await tran.CommitAsync();
                 return new List<IdentityResponseInfo>();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
                 return new List<IdentityResponseInfo>();
