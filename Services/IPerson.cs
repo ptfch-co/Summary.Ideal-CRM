@@ -12,6 +12,7 @@ namespace Summary.IdealCrm.Services
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
+    using Core.Mvc.Utilities;
 
     public interface IPersonService
     {
@@ -41,21 +42,32 @@ namespace Summary.IdealCrm.Services
             _logger = logger;
         }
 
-        private async Task<string> GetIdByMobileNoAsync(string mobile)
+        private async Task<CheckMobileIsExistResponseInfo> GetPersonByMobileAsync(string mobile)
         {
-            using (var connection = _db.CreateConnection())
+            mobile = mobile.RemoveMobilePrefixNo("0");
+
+            var url = $"{_options.ApiAddress}/api/ApiCompany/CompanyMultiSelect";
+
+            var data = new
             {
-                connection.ConnectionString = _options.ConnectionString;
-                await connection.OpenAsync();
-                using (var tran = connection.BeginTransaction())
-                {
-                    return await connection.QueryFirstOrDefaultAsync<string>(
-                        $"select top 1 p.CompanyPersonID from dbo.CrmCompanyPersons as p where p.prsMobile like N'%{Regex.Replace(mobile, MOBILE_REGEX_FORMAT, String.Empty)}%';",
-                        null,
-                        tran
-                    );
-                }
-            }
+                UserName = _options.UserName,
+                Password = _options.Password,
+                ApiFieldName = "PrsMob",
+                ApiFieldValue = mobile
+            };
+
+            var person = await _client.SendPostRequestAsync<CheckMobileIsExistResponseInfo>(
+                url,
+                data
+            );
+
+            if (person.Status == Status.Error) throw new WorkflowException(
+                "خطا ناشناخته رخ داده است",
+                null,
+                person.Message
+            );
+
+            return person;
         }
 
         private async Task<string> GetIdByAsync(
@@ -72,15 +84,28 @@ namespace Summary.IdealCrm.Services
                 { "Password", password }
             };
 
-            if (searchKind is PersonSearchKind.Mobile) return await GetIdByMobileNoAsync(filter);
+            if (searchKind is PersonSearchKind.Mobile)
+            {
+                var person = await GetPersonByMobileAsync(filter);
+
+                if (person.Data.Count() > 1) throw new WorkflowException(
+                    $"از این شماره همراه تعداد {person.Data.Count()} پروفایل در CRM ایده آل وجود دارد.",
+                    null,
+                    filter,
+                    "کاربر گرامی؛ پروفایل های تکراری را در CRM ایده ال ادغام نمایید سپس این درخواست را مجدداً به صف همگام سازی ارسال کنید.",
+                    Level.Information
+                );
+
+                return person.Data.FirstOrDefault()?.ApiCompanyId.ToString();
+            }
 
             switch (searchKind)
-            {
-                case PersonSearchKind.NationalCode: data.Add("ApiPrsNationalCode", filter); break;
-                case PersonSearchKind.Email: data.Add("ApiPrsEmail", filter); break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(searchKind));
-            }
+                {
+                    case PersonSearchKind.NationalCode: data.Add("ApiPrsNationalCode", filter); break;
+                    case PersonSearchKind.Email: data.Add("ApiPrsEmail", filter); break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(searchKind));
+                }
 
             var prs = await _client.SendPostRequestAsync<GetPersonIdResponseModel>(
                 $"{_options.ApiAddress}/Api/ApiCompanyPerson/ReturnCompanyPersonId",
@@ -102,10 +127,9 @@ namespace Summary.IdealCrm.Services
             password = String.IsNullOrWhiteSpace(password) ? _options.Password : password;
 
             string personId;
-            if (searchKind is PersonSearchKind.Id)
-            {
-                personId = filter;
-            }
+
+            if (searchKind is PersonSearchKind.Id) personId = filter;
+
             else
             {
                 personId = await GetIdByAsync(
@@ -118,14 +142,16 @@ namespace Summary.IdealCrm.Services
 
             if (String.IsNullOrWhiteSpace(personId)) return null;
 
+            var data = new
+            {
+                UserName = userName,
+                Password = password,
+                ApiCompanyId = personId,
+            };
+
             var personDetails = await _client.SendPostRequestAsync<BaseInformationResultModel<PersonInfo>>(
                 $"{_options.ApiAddress}/Api/ApiCompanyPerson/Select",
-                new
-                {
-                    UserName = userName,
-                    Password = password,
-                    ApiCompanyPersonId = personId,
-                },
+                data,
                 null,
                 "application/x-www-form-urlencoded"
             );
