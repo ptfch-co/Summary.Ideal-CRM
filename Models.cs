@@ -3,9 +3,13 @@ namespace Summary.IdealCrm
     using System;
     using System.Collections.Generic;
 
-    public class BaseResultModel
+    public class BaseResultModel : BaseResponseInfo
     {
         public string Data { get; set; }
+    }
+
+    public abstract class BaseResponseInfo
+    {
         public Status Status { get; set; }
         public string Message { get; set; }
     }
@@ -368,5 +372,159 @@ namespace Summary.IdealCrm
         public string IdentityType { get; set; }
         public string Mobile { get; set; }
         public DateTime LastModify { get; set; }
+    }
+
+    public class CheckMobileIsExistResponseInfo : BaseResponseInfo
+    {
+        public IEnumerable<CheckMobileIsExistResponseModel> Data { get; set; }
+    }
+
+    public class CheckMobileIsExistResponseModel
+    {
+        public long ApiCompanyId { get; set; }
+    }
+
+    public class GetPresentationResponseInfo : BaseResponseInfo
+    {
+        public IEnumerable<GetPresentationResponseModel> Data { get; set; }
+    }
+
+    public class GetPresentationResponseModel
+    {
+        private string _presentation;
+
+        public int ApiCompanyPresentationId { get; set; }
+
+        public string ApiPresentation
+        {
+            get => _presentation?.Trim();
+            set => _presentation = value;
+        }
+    }
+
+    public class GetIdentityTypeResponseInfo : BaseResponseInfo
+    {
+        public IEnumerable<GetIdentityTypeResponseModel> Data { get; set; }
+    }
+
+    public class GetIdentityTypeResponseModel
+    {
+        private string _companyTypeName;
+
+        public int ApiCompanyTypeId { get; set; }
+
+        public string ApiCompanyTypeName
+        {
+            get => _companyTypeName?.Trim();
+            set => _companyTypeName = value;
+        }
+    }
+
+    public class GetIdentityGroupResponseInfo : BaseResponseInfo
+    {
+        public IEnumerable<GetIdentityGroupResponseModel> Data { get; set; }
+    }
+
+    public class GetIdentityGroupResponseModel
+    {
+        private string _groupName;
+
+        public int ApiCompanyGroupId { get; set; }
+
+        public string ApiGroupName
+        {
+            get => _groupName?.Trim();
+            set => _groupName = value;
+        }
+    }
+
+    public class GetCountryResponseInfo : BaseResponseInfo
+    {
+        public IEnumerable<GetCountryResponseModel> Data { get; set; }
+    }
+
+    public class GetCountryResponseModel
+    {
+        private string _country;
+
+        public int CountryId { get; set; }
+
+        public string Country
+        {
+            get => _country?.Trim();
+            set => _country = value;
+        }
+    }
+
+    public class GetProvinceResponseInfo : BaseResponseInfo
+    {
+        public IEnumerable<GetProvinceResponseModel> Data { get; set; }
+    }
+
+    public class GetProvinceResponseModel
+    {
+        private string _province;
+
+        public int ProvinceId { get; set; }
+
+        public string Province
+        {
+            get => _province?.Trim();
+            set => _province = value;
+        }
+    }
+
+    public class GetCityResponseInfo : BaseResponseInfo
+    {
+        public IEnumerable<GetCityResponseModel> Data { get; set; }
+    }
+
+    public class GetCityResponseModel
+    {
+        private string _city;
+
+        public int CityId { get; set; }
+
+        public string City
+        {
+            get => _city?.Trim();
+            set => _city = value;
+        }
+    }
+
+    public class GetUserResponseInfo : BaseResponseInfo
+    {
+        public IEnumerable<GetUserResponseModel> Data { get; set; }
+    }
+
+    public class GetUserResponseModel
+    {
+        private string _fullname;
+
+        public int ApiUserId { get; set; }
+
+        public string ApiFullName
+        {
+            get => _fullname?.Trim();
+            set => _fullname = value;
+        }
+    }
+
+    public class GetCampaignResponseInfo : BaseResponseInfo
+    {
+        public IEnumerable<GetCampaignResponseModel> Data { get; set; }
+    }
+
+    public class GetCampaignResponseModel
+    {
+        private string _fullname;
+
+        public int ApiCompanyCampaignId { get; set; }
+
+        public string ApiCampaignFullName
+        {
+            get => _fullname?.Trim();
+            set => _fullname = value;
+        }
     }
 }
