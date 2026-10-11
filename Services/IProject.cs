@@ -88,16 +88,19 @@ namespace Summary.IdealCrm.Services
         private readonly IDbConnectionAccessor _db;
         private readonly IdealCrmSettings _options;
         private readonly IIdentityService _identity;
+        private readonly IUserService _user;
 
         public ProjectService(HttpRequestClient client,
             IDbConnectionAccessor db,
             IOptions<IdealCrmSettings> options,
-            IIdentityService identity)
+            IIdentityService identity,
+            IUserService user)
         {
             _client = client;
             _db = db;
             _options = options.Value;
             _identity = identity;
+            _user = user;
         }
 
         private async Task<string> GetIdByAsync(string userName,
@@ -165,20 +168,6 @@ namespace Summary.IdealCrm.Services
             return projInfo.Data;
         }
 
-        private async Task<int> GetPresentationIdByAsync(string filter)
-        {
-            using (var connection = _db.CreateConnection())
-            {
-                connection.ConnectionString = _options.ConnectionString;
-                await connection.OpenAsync();
-                using (var transaction = connection.BeginTransaction())
-                {
-                    var query = $"select top 1 p.companypresentationid from CrmCompanyPresentation as p where rtrim(ltrim(p.presentation)) = N'{filter}';";
-                    return await connection.QueryFirstAsync<int>(query, null, transaction);
-                }
-            }
-        }
-
         private async Task<int> GetGradeIdAsync(
             string userName,
             string password,
@@ -217,8 +206,10 @@ namespace Summary.IdealCrm.Services
             return groups.Data.First(x => x.ApiProjectGroup.Equals(name)).ApiProjectGroupID;
         }
 
-        private async Task<int> GetConversationStatusGroupIdAsync(string filter)
+        private async Task<int?> GetConversationStatusGroupIdAsync(string filter)
         {
+            if (String.IsNullOrWhiteSpace(_options.ConnectionString)) return default;
+
             using (var connection = _db.CreateConnection())
             {
                 connection.ConnectionString = _options.ConnectionString;
@@ -251,26 +242,6 @@ namespace Summary.IdealCrm.Services
             return priorities.Data.First(x => x.ApiPriority.Equals(name)).ApiProjectPriorityID;
         }
 
-        private async Task<int> GetUserIdAsync(
-            string userName,
-            string password,
-            string name)
-        {
-            var user = await _client.SendPostRequestAsync<BaseInformationResultModel<UserInfo>>(
-                $"{_options.ApiAddress}/Api/ApiUser/Select",
-                new
-                {
-                    UserName = userName,
-                    Password = password,
-                    ApiUserName = name
-                },
-                null,
-                "application/x-www-form-urlencoded"
-            );
-
-            return user.Data.Single().ApiUserId;
-        }
-
         public async Task<string> CreateAsync(
             string userName,
             string password,
@@ -299,14 +270,14 @@ namespace Summary.IdealCrm.Services
             int gradeId = grade.ConvertTo<int>() ?? await GetGradeIdAsync(userName, password, grade);
             int priorityId = priority.ConvertTo<int>() ?? await GetPriorityIdAsync(userName, password, priority);
             int groupId = group.ConvertTo<int>() ?? await GetGroupIdAsync(userName, password, group);
-            int cnvsStatusGroupId = cnvsStatusGroup.ConvertTo<int>() ?? await GetConversationStatusGroupIdAsync(cnvsStatusGroup);
-            int starterUserId = starterUser.ConvertTo<int>() ?? await GetUserIdAsync(userName, password, starterUser);
-            int presentationId = cmpPresentation.ConvertTo<int>() ?? await GetPresentationIdByAsync(cmpPresentation);
+            int? cnvsStatusGroupId = cnvsStatusGroup.ConvertTo<int>() ?? await GetConversationStatusGroupIdAsync(cnvsStatusGroup);
+            int starterUserId = starterUser.ConvertTo<int>() ?? await _user.GetUserIdAsync(starterUser);
+            int? presentationId = cmpPresentation.ConvertTo<int>() ?? await _identity.GetPresentationIdByAsync(cmpPresentation);
             int? creatorUserId = null;
 
             if (String.IsNullOrWhiteSpace(creatorUser) is false)
             {
-                creatorUserId = creatorUser.ConvertTo<int>() ?? await GetUserIdAsync(userName, password, creatorUser);
+                creatorUserId = creatorUser.ConvertTo<int>() ?? await _user.GetUserIdAsync(creatorUser);
             }
 
             IEnumerable<string> campaign_ids = null;
@@ -346,31 +317,33 @@ namespace Summary.IdealCrm.Services
             DbConnection db = null;
             DbTransaction tran = null;
 
-            var query = $"update p set p.prjInquiryNum = '{inquiryNumber}' from dbo.CrmProjects as p where p.ProjectID = {proj_response.Data};";
+            if (String.IsNullOrWhiteSpace(_options.ConnectionString) is false)
+            {
+                var query = $"update p set p.prjInquiryNum = '{inquiryNumber}' from dbo.CrmProjects as p where p.ProjectID = {proj_response.Data};";
 
-            try
-            {
-                db = _db.CreateConnection();
-                db.ConnectionString = _options.ConnectionString;
-                await db.OpenAsync();
-                tran = db.BeginTransaction();
-                await db.ExecuteAsync(query, null, tran, null, CommandType.Text);
-                await tran.CommitAsync();
-            }
-            catch
-            {
-                throw;
-            }
-            finally
-            {
-                tran?.Dispose();
-                db?.Dispose();
+                try
+                {
+                    db = _db.CreateConnection();
+                    db.ConnectionString = _options.ConnectionString;
+                    await db.OpenAsync();
+                    tran = db.BeginTransaction();
+                    await db.ExecuteAsync(query, null, tran, null, CommandType.Text);
+                    await tran.CommitAsync();
+                }
+                catch
+                {
+                    throw;
+                }
+                finally
+                {
+                    tran?.Dispose();
+                    db?.Dispose();
+                }
             }
 
-            if (proj_response.Status == Status.Success)
-                return proj_response.Data;
-            else
-                throw new NotImplementedException(proj_response.Message);
+            if (proj_response.Status == Status.Success) return proj_response.Data;
+
+            else throw new NotImplementedException(proj_response.Message);
         }
 
         public async Task<ProjectInfo> GetDetailsByIdAsync(
@@ -428,7 +401,7 @@ namespace Summary.IdealCrm.Services
             password = String.IsNullOrWhiteSpace(password) ? _options.Password : password;
             var creator_user = _options.DefaultCreatorUser;
 
-            var user_id = await _identity.GetUserIdAsync(creator_user);
+            var user_id = await _user.GetUserIdAsync(creator_user);
 
             var projDetails = await GetDetailsByIdAsync(
                 userName,
@@ -451,7 +424,7 @@ namespace Summary.IdealCrm.Services
 
             if (starterUserEditable)
             {
-                int starterUserId = starterUser.ConvertTo<int>() ?? await GetUserIdAsync(userName, password, starterUser);
+                int starterUserId = starterUser.ConvertTo<int>() ?? await _user.GetUserIdAsync(starterUser);
                 data.Add("ApiPrjStarterUserId", starterUserId);
             }
 
@@ -475,7 +448,7 @@ namespace Summary.IdealCrm.Services
 
             if (CnvsStatusGroupEditable)
             {
-                int cnvsStatusGroupId = cnvsStatusGroup.ConvertTo<int>() ?? await GetConversationStatusGroupIdAsync(cnvsStatusGroup);
+                int? cnvsStatusGroupId = cnvsStatusGroup.ConvertTo<int>() ?? await GetConversationStatusGroupIdAsync(cnvsStatusGroup);
                 data.Add("ApiPrjCnvsStatusGroupId", cnvsStatusGroupId);
             }
 
@@ -487,12 +460,13 @@ namespace Summary.IdealCrm.Services
 
             if (cmpPresentationEditable)
             {
-                int presentationId = cmpPresentation.ConvertTo<int>() ?? await GetPresentationIdByAsync(cmpPresentation);
-                data.Add("ApiPrjCmpPresentationId", presentationId);
+                data.Add(
+                    "ApiPrjCmpPresentationId",
+                    cmpPresentation.ConvertTo<int>() ?? await _identity.GetPresentationIdByAsync(cmpPresentation)
+                );
             }
 
-            if(IsFinishedEditable)
-                data.Add("ApiPrjIsFinished", isFinished);
+            if(IsFinishedEditable) data.Add("ApiPrjIsFinished", isFinished);
 
             var proj_response = await _client.SendPostRequestAsync<BaseResultModel>(
                 $"{_options.ApiAddress}/Api/ApiProject/Update",
