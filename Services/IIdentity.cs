@@ -88,9 +88,9 @@ namespace Summary.IdealCrm.Services
             bool addToCampaign,
             string campaign
         );
-        Task<int> GetUserIdAsync(string user);
         Task<IList<IdentityResponseInfo>> SyncAndGetUpdatedAsync();
         Task Synced(int id);
+        Task<int?> GetPresentationIdByAsync(string filter);
     }
 
     public class IdentityService : BaseService, IIdentityService
@@ -100,203 +100,236 @@ namespace Summary.IdealCrm.Services
         private readonly IdealCrmSettings _options;
         private readonly IPersonService _person;
         private readonly ILogger<IdentityService> _logger;
+        private readonly IUserService _user;
 
         public IdentityService(HttpRequestClient client,
             IDbConnectionAccessor db,
             IOptions<IdealCrmSettings> options,
             IPersonService person,
-            ILogger<IdentityService> logger)
+            ILogger<IdentityService> logger,
+            IUserService user)
         {
             _client = client;
             _db = db;
             _options = options.Value;
             _person = person;
             _logger = logger;
+            _user = user;
         }
 
         public async Task<bool> CheckMobileIsExistAsync(string mobile)
         {
-            mobile = mobile.RemoveMobilePrefixNo();
+            mobile = mobile.RemoveMobilePrefixNo("0");
 
-            using (var connection = _db.CreateConnection())
+            var url = $"{_options.ApiAddress}/api/ApiCompany/CompanyMultiSelect";
+
+            var data = new
             {
-                connection.ConnectionString = _options.ConnectionString;
-                await connection.OpenAsync();
-                using (var tran = connection.BeginTransaction())
-                {
-                    return await connection.QueryFirstOrDefaultAsync<bool>
-                    (
-                        $"select count(1) from dbo.CrmCompanyPersons where prsMobile like N'%{mobile}%';",
-                        null,
-                        tran
-                    );
-                }
-            }
+                UserName = _options.UserName,
+                Password = _options.Password,
+                ApiFieldName = "PrsMob",
+                ApiFieldValue = mobile
+            };
+
+            var person = await _client.SendPostRequestAsync<CheckMobileIsExistResponseInfo>(
+                url,
+                data
+            );
+
+            if (person.Status == Status.Error) ThrowExceptionIf.UnknownMessage(person.Message);
+
+            return person.Data.Any();
         }
 
-        private async Task<int?> GetPresentationIdByAsync(string filter)
+        public async Task<int?> GetPresentationIdByAsync(string filter)
         {
-            using (var connection = _db.CreateConnection())
+            var url = $"{_options.ApiAddress}/Api/ApiBaseInfo/SelectCompanyPresentation";
+
+            var data = new
             {
-                connection.ConnectionString = _options.ConnectionString;
-                await connection.OpenAsync();
-                using (var transaction = connection.BeginTransaction())
-                {
-                    var query = $"select top 1 p.companypresentationid from CrmCompanyPresentation as p where rtrim(ltrim(p.presentation)) = N'{filter}';";
-                    return await connection.QueryFirstOrDefaultAsync<int?>(query, null, transaction);
-                }
-            }
+                UserName = _options.UserName,
+                Password = _options.Password
+            };
+
+            var response = await _client.SendPostRequestAsync<GetPresentationResponseInfo>(
+                url,
+                data
+            );
+
+            if (response.Status == Status.Error) throw new WorkflowException(
+                "خطا ناشناخته رخ داده است",
+                null,
+                response.Message
+            );
+
+            return response.Data.FirstOrDefault(x => x.ApiPresentation == filter.Trim())?.ApiCompanyPresentationId;
         }
 
         private async Task<int?> GetCompanyTypeIdByAsync(string filter)
         {
-            using (var connection = _db.CreateConnection())
+            var url = $"{_options.ApiAddress}/Api/ApiBaseInfo/SelectCompanyType";
+
+            var data = new
             {
-                connection.ConnectionString = _options.ConnectionString;
-                await connection.OpenAsync();
-                using (var transaction = connection.BeginTransaction())
-                {
-                    var query = $"select top 1 t.CompanyTypeID from CrmCompanyType as t where ltrim(rtrim(t.CompanyTypeName)) = N'{filter}';";
-                    return await connection.QueryFirstOrDefaultAsync<int?>(query, null, transaction, null, CommandType.Text);
-                }
-            }
+                UserName = _options.UserName,
+                Password = _options.Password
+            };
+
+            var response = await _client.SendPostRequestAsync<GetIdentityTypeResponseInfo>(
+                url,
+                data
+            );
+
+            if (response.Status == Status.Error) throw new WorkflowException(
+                "خطا ناشناخته رخ داده است",
+                null,
+                response.Message
+            );
+
+            return response.Data.FirstOrDefault(x => x.ApiCompanyTypeName == filter.Trim())?.ApiCompanyTypeId;
         }
 
         private async Task<int?> GetCompanyGroupIdByAsync(string filter)
         {
-            using (var connection = _db.CreateConnection())
+            var url = $"{_options.ApiAddress}/Api/ApiBaseInfo/SelectCompanyGroup";
+
+            var data = new
             {
-                connection.ConnectionString = _options.ConnectionString;
-                await connection.OpenAsync();
-                using (var transaction = connection.BeginTransaction())
-                {
-                    var query = $"select top 1 g.companygroupid from CrmCompanyGroups as g where ltrim(rtrim(g.GroupName)) = N'{filter}';";
-                    return await connection.QueryFirstOrDefaultAsync<int?>(query, null, transaction, null, CommandType.Text);
-                }
-            }
+                UserName = _options.UserName,
+                Password = _options.Password
+            };
+
+            var response = await _client.SendPostRequestAsync<GetIdentityGroupResponseInfo>(
+                url,
+                data
+            );
+
+            if (response.Status == Status.Error) throw new WorkflowException(
+                "خطا ناشناخته رخ داده است",
+                null,
+                response.Message
+            );
+
+            return response.Data.FirstOrDefault(x => x.ApiGroupName == filter.Trim())?.ApiCompanyGroupId;
         }
 
         private async Task<int?> GetCountryIdByAsync(string filter)
         {
             if (String.IsNullOrWhiteSpace(filter)) return default;
 
-            filter = filter.Trim('\'');
+            var url = $"{_options.ApiAddress}/Api/ApiBaseInfo/SelectCountry";
 
-            using (var connection = _db.CreateConnection())
+            var data = new
             {
-                connection.ConnectionString = _options.ConnectionString;
-                await connection.OpenAsync();
-                using (var transaction = connection.BeginTransaction())
-                {
-                    var query = $"select top 1 c.countryid from country as c where rtrim(ltrim(c.country)) = N'{filter}';";
-                    return await connection.QueryFirstOrDefaultAsync<int?>(query, null, transaction, null, CommandType.Text);
-                }
-            }
+                UserName = _options.UserName,
+                Password = _options.Password
+            };
+
+            var response = await _client.SendPostRequestAsync<GetCountryResponseInfo>(
+                url,
+                data
+            );
+
+            if (response.Status == Status.Error) throw new WorkflowException(
+                "خطا ناشناخته رخ داده است",
+                null,
+                response.Message
+            );
+
+            return response.Data.FirstOrDefault(x => x.Country == filter.Trim())?.CountryId;
         }
 
         private async Task<int?> GetProvinceIdByAsync(string filter, int countryId)
         {
             if (String.IsNullOrWhiteSpace(filter)) return default;
 
-            filter = filter.Trim('\'');
+            var url = $"{_options.ApiAddress}/Api/ApiBaseInfo/SelectProvince";
 
-            using (var connection = _db.CreateConnection())
+            var data = new
             {
-                connection.ConnectionString = _options.ConnectionString;
-                await connection.OpenAsync();
-                using (var transaction = connection.BeginTransaction())
-                {
-                    var query = $@"select top 1 p.provinceid
-                    from Province as p
-                    where rtrim(ltrim(p.province)) = N'{filter.Trim()}'
-                    and p.countryId = '{countryId}';";
-                    return await connection.QueryFirstOrDefaultAsync<int?>(
-                        query,
-                        null,
-                        transaction
-                    );
-                }
-            }
+                UserName = _options.UserName,
+                Password = _options.Password,
+                ApiCountryId = countryId
+            };
+
+            var response = await _client.SendPostRequestAsync<GetProvinceResponseInfo>(
+                url,
+                data
+            );
+
+            if (response.Status == Status.Error) throw new WorkflowException(
+                "خطا ناشناخته رخ داده است",
+                null,
+                response.Message
+            );
+
+            return response.Data.FirstOrDefault(x => x.Province == filter.Trim())?.ProvinceId;
         }
 
         private async Task<int?> GetCityIdByAsync(string filter, int provinceId)
         {
             if (String.IsNullOrWhiteSpace(filter)) return default;
 
-            filter = filter.Trim('\'');
+            var url = $"{_options.ApiAddress}/Api/ApiBaseInfo/SelectProvince";
 
-            using (var connection = _db.CreateConnection())
+            var data = new
             {
-                connection.ConnectionString = _options.ConnectionString;
-                await connection.OpenAsync();
-                using (var transaction = connection.BeginTransaction())
-                {
-                    var query = $@"select top 1 c.cityid
-                    from City as c
-                    where
-                    rtrim(ltrim(c.city)) = N'{filter}' and c.provinceId = '{provinceId}';";
-                    return await connection.QueryFirstOrDefaultAsync<int?>(
-                        query,
-                        null,
-                        transaction
-                    );
-                }
-            }
+                UserName = _options.UserName,
+                Password = _options.Password,
+                ApiProvinceId = provinceId
+            };
+
+            var response = await _client.SendPostRequestAsync<GetCityResponseInfo>(
+                url,
+                data
+            );
+
+            if (response.Status == Status.Error) throw new WorkflowException(
+                "خطا ناشناخته رخ داده است",
+                null,
+                response.Message
+            );
+
+            return response.Data.FirstOrDefault(x => x.City == filter.Trim())?.CityId;
         }
 
         public async Task<IEnumerable<string>> GetCampaignIdsAsync(string[] names)
         {
-            using (var connection = _db.CreateConnection())
+            var url = $"{_options.ApiAddress}/Api/ApiBaseInfo/SelectCompanyCampaign";
+
+            var data = new
             {
-                connection.ConnectionString = _options.ConnectionString;
-                await connection.OpenAsync();
-                using (var tran = connection.BeginTransaction())
-                {
-                    var query = $"select c.companycampaignid from dbo.crmcompanycampaign as c where c.campaignname in (N'{String.Join("', N'", names)}');";
-                    return await connection.QueryAsync<string>(query, null, tran);
-                }
-            }
+                UserName = _options.UserName,
+                Password = _options.Password
+            };
+
+            var response = await _client.SendPostRequestAsync<GetCampaignResponseInfo>(
+                url,
+                data
+            );
+
+            if (response.Status == Status.Error) throw new WorkflowException(
+                "خطا ناشناخته رخ داده است",
+                null,
+                response.Message
+            );
+
+            return response.Data.Where(x => names.Contains(x.ApiCampaignFullName))
+                .Select(x => x.ApiCompanyCampaignId.ToString());
         }
 
-        /// <summary>
-        /// این سرویس به صورت هوشمند بر اساس نام کاربری و شناسه کاربر در بانک اطلاعاتی
-        /// ایده آل جستجو میکند و در صورت وجود کاربر شناسه آن را بر میگرداند
-        /// </summary>
-        /// <param name="user">نام کاربر یا شناسه</param>
-        /// <returns>شناسه کاربر</returns>
-        public async Task<int> GetUserIdAsync(string user)
-        {
-            if (String.IsNullOrWhiteSpace(user)) throw new ArgumentNullException("فیلد نام کاربری الزامی است و نمیتواند خالی رها شود.");
-
-            using (var db = _db.CreateConnection())
-            {
-                db.ConnectionString = _options.ConnectionString;
-                await db.OpenAsync();
-                using (var tran = db.BeginTransaction())
-                {
-                    var query = $@"select top 1 u.userid
-                    from users as u
-                    where
-                    u.username = N'{user}' or u.userid = '{user.ConvertTo<int>()}';";
-                    return await db.QuerySingleAsync<int>(
-                        query,
-                        null,
-                        tran
-                    );
-                }
-            }
-        }
-
-        public async Task<CreateIdentityResponseInfo> CreateIdentityAsync(CreateOrganizationRequestInfo org,
+        public async Task<CreateIdentityResponseInfo> CreateIdentityAsync(
+            CreateOrganizationRequestInfo org,
             CreatePersonRequestInfo person)
         {
             person.Mobile = person.Mobile.RemoveMobilePrefixNo("0");
 
-            if (string.IsNullOrWhiteSpace(person.Mobile) is false && person.Mobile.IsMobileNo() is false) throw new WorkflowException(
+            if (!String.IsNullOrWhiteSpace(person.Mobile) && !person.Mobile.IsMobileNo()) throw new WorkflowException(
                 "مقدار پارامتر شماره موبایل نامعتبر است.",
                 null,
                 person.Mobile,
-                "رابط گرامی؛ شماره موبایل وارد شده نامعتبر می‌باشد. پیشنهاد میشود نسبت به اصلاح شماره موبایل اقدام نمایید سپس درخواست را مجدداً به صف همگام سازی ارسال کنید."
+                "کاربر گرامی؛ شماره موبایل وارد شده نامعتبر می‌باشد. پیشنهاد میشود نسبت به اصلاح شماره موبایل اقدام نمایید سپس درخواست را مجدداً به صف همگام سازی ارسال کنید.",
+                Level.Information
             );
 
             var mobileIsExist = await CheckMobileIsExistAsync(person.Mobile);
@@ -331,13 +364,13 @@ namespace Summary.IdealCrm.Services
             int? creatorUserIdOrg = org.CreatorUser.ConvertTo<int>();
             if (creatorUserIdOrg.HasValue is false && String.IsNullOrWhiteSpace(org.CreatorUser) is false)
             {
-                creatorUserIdOrg = await GetUserIdAsync(org.CreatorUser);
+                creatorUserIdOrg = await _user.GetUserIdAsync(org.CreatorUser);
             }
             // واکشی شناسه کاربر ایجاد کننده پرسنل
             int? creatorUserIdPerson = person.CreatorUser.ConvertTo<int>();
             if (creatorUserIdPerson.HasValue is false && String.IsNullOrWhiteSpace(person.CreatorUser) is false)
             {
-                creatorUserIdPerson = await GetUserIdAsync(person.CreatorUser);
+                creatorUserIdPerson = await _user.GetUserIdAsync(person.CreatorUser);
             }
             // واکشی شناسه کمپین(ها)
             string campaignIds = null;
@@ -349,7 +382,7 @@ namespace Summary.IdealCrm.Services
             int? assignToId = org.AssignTo.ConvertTo<int>();
             if (assignToId.HasValue is false && String.IsNullOrWhiteSpace(org.AssignTo) is false)
             {
-                assignToId = await GetUserIdAsync(org.AssignTo);
+                assignToId = await _user.GetUserIdAsync(org.AssignTo);
             }
             // Extract company's phone prefix
             var cmpPhonePrefix = String.IsNullOrWhiteSpace(org.Phone) ? "" : Regex.Replace(org.Phone, TELPHONE_REGEX_FORMAT, "");
@@ -388,10 +421,9 @@ namespace Summary.IdealCrm.Services
             if (org_response.Status == Status.Error)
             {
                 // Throw exception if one of the information is duplicate or failed request
-                if (org_response.Message.Contains("تکرار"))
-                    throw new PersonIsExistException(org_response.Message);
-                else
-                    throw new NotImplementedException(org_response.Message);
+                if (org_response.Message.Contains("تکرار")) throw new PersonIsExistException(org_response.Message);
+
+                else throw new NotImplementedException(org_response.Message);
             }
 
             // Apply the type of identity
@@ -569,7 +601,7 @@ namespace Summary.IdealCrm.Services
             if (isRegisterNumberEditable) companyData.Add("ApiCmpRegistrationNumber", registerNumber);
             if (isPostalCodeEditable) companyData.Add("ApiCmpZipCode", postalCode);
             if (isCmpEmailEditable) companyData.Add("ApiCmpEmail", cmpEmail);
-            if (isAssignToEditable) companyData.Add("ApiCmpReferUserId", await GetUserIdAsync(assignTo));
+            if (isAssignToEditable) companyData.Add("ApiCmpReferUserId", await _user.GetUserIdAsync(assignTo));
             if (isIdentityTypeEditable) companyData.Add("ApiCmpKind", identityType);
             if (isPostalBoxEditable) companyData.Add("ApiCmpPostBox", postalBox);
 
