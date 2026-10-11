@@ -14,7 +14,14 @@ namespace Summary.IdealCrm.Settings
 
     public class IdealCrmSettings
     {
-        public string ApiAddress { get; set; }
+        private string api_address;
+
+        public string ApiAddress
+        {
+            get => api_address?.TrimEnd('/');
+            set => api_address = value;
+        }
+
         public string UserName { get; set; }
         public string Password { get; set; }
         public string ConnectionString { get; set; }
